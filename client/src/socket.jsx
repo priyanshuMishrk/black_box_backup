@@ -1,14 +1,3 @@
-import { io } from 'socket.io-client';
-import { BaseUrl } from './Context/AuthContext';
- // Replace with your server URL
-
-// Create and export a singleton instance of Socket.IO
-const SOCKET_URL = "wss://blackboxnow.com"; // Secure WebSocket
-const socket = io(SOCKET_URL, {
-    transports: ['websocket'],
-    secure: true,
-    autoConnect: false,
-});
-
-export default socket;
-
+version https://git-lfs.github.com/spec/v1
+oid sha256:6b42202b653736dc950a1fe5f2c3e9cf374b82bd27ea6b1115afe92d27a18a0c
+size 375

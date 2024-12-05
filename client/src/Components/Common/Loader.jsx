@@ -1,13 +1,3 @@
-import React from "react";
-
-const Loader = () => {
-  return (
-    <div className="loadingio-spinner-rolling-jm01qv7mmak mx-2">
-      <div className="ldio-cqj9sf9mcdj">
-        <div></div>
-      </div>
-    </div>
-  );
-};
-
-export default Loader;
+version https://git-lfs.github.com/spec/v1
+oid sha256:99f4a9d947bfc79b7b1a9903d5920122c469a862f0fba137944885128f2086ae
+size 244

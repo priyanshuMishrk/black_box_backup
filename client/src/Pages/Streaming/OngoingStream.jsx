@@ -1,22 +1,3 @@
-import React, { useState } from "react";
-import Footer from "../../Components/Common/Footer";
-import Header from "../../Components/Common/Header";
-import ImageSlider from "../../Components/Home/ImageSliderStream";
-import { useNavigate } from "react-router-dom";
-
-const Streaming = () => {
-    const [roomId , setRoomID] = useState()
-    const Navigate = useNavigate()
-    const handleJoin = () => {
-        Navigate(`/room/${roomId}`) 
-    }
-    return (<>
-        <div>
-            <input type="text" placeholder="enter room id"  value={roomId} onChange={ e => setRoomID(e.target.value)} />
-            <button onClick={handleJoin}> Join </button>
-        </div>
-    {/* <Footer/> */}
-    </>)
-}
-
-export default Streaming;
+version https://git-lfs.github.com/spec/v1
+oid sha256:4dbc11f9756d9291ad734938b60c2eb2ab1c38e00f8855f0522b3462661fcf3d
+size 723

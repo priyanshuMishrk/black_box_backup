@@ -1,23 +1,3 @@
-import React, { useState } from "react";
-import Footer from "../../Components/Common/Footer";
-import Header from "../../Components/Common/Header";
-import ImageSlider from "../../Components/Home/ImageSliderStream";
-import { useNavigate } from "react-router-dom";
-
-const ClassEnter = () => {
-    const [roomId , setRoomID] = useState()
-    const Navigate = useNavigate()
-    const handleJoin = () => {
-        Navigate(`/class/host/${roomId}`)
-    }
-    return (<>
-    {/* <Header/> */}
-        <div>
-            <input type="text" placeholder="enter class id"  value={roomId} onChange={ e => setRoomID(e.target.value)} />
-            <button onClick={handleJoin}> Join </button>
-        </div>
-    {/* <Footer/> */}
-    </>)
-}
-
-export default ClassEnter;
+version https://git-lfs.github.com/spec/v1
+oid sha256:499dd4e86d07aaea6c0b481df893dc29a96dfe4af7d9928f11b5e17fa44cfdfd
+size 753

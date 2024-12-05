@@ -1,14 +1,3 @@
-import React from 'react';
-
-const Star = ({ filled, onClick }) => {
-  return (
-    <span
-      style={{ color: filled ? 'yellow' : 'grey', cursor: 'pointer' }}
-      onClick={onClick}
-    >
-      &#9733; {/* Unicode for star */}
-    </span>
-  );
-};
-
-export default Star;
+version https://git-lfs.github.com/spec/v1
+oid sha256:34f6d966bd36bb84a428913ec7dc30d6ce8905ee287e4bc980dc35c6b64b8046
+size 270

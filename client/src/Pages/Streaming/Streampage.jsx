@@ -1,17 +1,3 @@
-import React from "react";
-import Footer from "../../Components/Common/Footer";
-import Header from "../../Components/Common/Header";
-import ImageSlider from "../../Components/Home/ImageSliderStream";
-
-const Streaming = () => {
-    return (<>
-    <Header/>
-    <ImageSlider classname="mt-5"/>
-        <div className="StreamData gl">
-            No Stream Data to show yet
-        </div>
-    <Footer/>
-    </>)
-}
-
-export default Streaming;
+version https://git-lfs.github.com/spec/v1
+oid sha256:4bfb5fcc26395db6ca9b48d9dd6eeffe5e32a003f2c614658228ce9603100251
+size 437

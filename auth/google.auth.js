@@ -1,28 +1,3 @@
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth2").Strategy;
-require("dotenv").config();
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALL_BACK_URL,
-      passReqToCallback: true,
-    },
-    function (request, accessToken, refreshToken, profile, done) {
-      // console.log(profile, ">>>", done);
-      return done(null, profile);
-    }
-  )
-);
-
-passport.serializeUser((user, done) => {
-  // console.log(user);
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  // console.log(user);
-  done(null, user);
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:53c58b870d1fb165e3b325449e890036283822f7b4c085b2c48f22e4fda0d6c7
+size 707

@@ -1,14 +1,3 @@
-const cron = require('node-cron');
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-
-// Schedule a cron job
-const job = cron.schedule('* * * * *', () => {
-    
-}, {
-  scheduled: true, // Whether the job is active after initialization
-  timezone: "Asia/Kolkata" // Optional: Set a timezone
-});
-
-// Export the job
-module.exports = job;
+version https://git-lfs.github.com/spec/v1
+oid sha256:3e9e1cc9e9c4b2de9f422d8215f1f1cdbf90da100464b8af41f80052b77bafc3
+size 371
