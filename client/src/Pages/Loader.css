@@ -1,0 +1,20 @@
+.loader-container {
+    display: flex; /* Center the loader */
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Optional: Full viewport height */
+  }
+  
+  .loader {
+    width: 60px;
+    height: 60px;
+    border: 8px solid #f0f0f0; /* Light gray background */
+    border-top: 8px solid #ffd700; /* Yellow (Gold) */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
