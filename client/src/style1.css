@@ -1,0 +1,30 @@
+.teacherClasses{
+    background-color: #f7f7f7 !important;
+    display: flex;
+    /* flex-direction: column; */
+    width: 45vw !important;
+    height: 60vw;
+    padding: 2vw;
+    border-radius: 5%;
+
+}
+
+.tcrow{
+    display: flex;
+    flex-direction: column;
+}
+
+.climg{
+    width: 40vw !important;
+    height: 50vw;
+    object-fit: cover;
+}
+
+.tclasstxt h6{
+    font-weight: bolder !important;
+    font-size: 1.25vw !important;
+}
+
+.tclasstxt {
+    margin-top: 1vw;
+}

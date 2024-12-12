@@ -1,0 +1,62 @@
+{
+  "name": "black_box",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "engines": {
+    "node": "16.16.0",
+    "npm": "8.11.0"
+  },
+  "scripts": {
+    "start": "nodemon app.js",
+    "dev": "node app.js",
+    "build": "prisma generate",
+    "pushorigin": "git status && git add . && git commit -m 'the changes in the fullstack' && git push origin main",
+    "pushheroku": "git status && git add . && git commit -m 'the changes occured for further updates' && git push heroku master",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^4.1.1",
+    "bcrypt": "^5.0.1",
+    "bhimupijs": "^2.0.0",
+    "cloudinary": "^1.30.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "fs-extra": "^11.2.0",
+    "http": "^0.0.1-security",
+    "http-errors": "^2.0.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "jspdf": "^2.5.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.7.8",
+    "open": "^8.4.0",
+    "passport": "^0.6.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth2": "^0.2.0",
+    "path": "^0.12.7",
+    "razorpay": "^2.9.4",
+    "react-cookie": "^7.1.4",
+    "socket.io": "^4.8.1",
+    "twilio": "^3.80.1",
+    "uuid": "^8.3.2",
+    "validate-upi-id": "^1.0.1",
+    "youtube-api": "^3.0.1"
+  },
+  "devDependencies": {
+    "kill-port": "^2.0.1",
+    "nodemon": "^2.0.19",
+    "prisma": "^4.1.1",
+    "swagger-jsdoc": "^6.2.5",
+    "swagger-ui-express": "^4.5.0"
+  }
+}
