@@ -277,29 +277,29 @@ export const AuthProvider = ({ children }) => {
   };
 
   //Dolphin>>>
-  const dvc = new window.DvcSDK();
-  dvc.setDomain("https://test-blackis.dolphinvc.com");
+  // const dvc = new window.DvcSDK();
+  // dvc.setDomain("https://test-blackis.dolphinvc.com");
   // dvc.getReconcileJwt(authTokens);
 
-  const reconcileJWT = async () => {
-    try {
-      const res = await axios.post(
-        dDomain + "auth/api/v1/reconcile-jwt",
-        { token: authTokens },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        },
-      );
-      // console.log(res.data);
-      setMeetingAuth(() => res.data);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const reconcileJWT = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       dDomain + "auth/api/v1/reconcile-jwt",
+  //       { token: authTokens },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //         },
+  //       },
+  //     );
+  //     // console.log(res.data);
+  //     setMeetingAuth(() => res.data);
+  //     return res.data;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const refreshJWT = async () => {
     try {
