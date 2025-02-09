@@ -340,12 +340,12 @@ export const AuthProvider = ({ children }) => {
         // water_mark_image_png: "string",
         // water_mark_image_link: "string",
       };
-      const token = await reconcileJWT();
+      // const token = await reconcileJWT();
       const res = await axios.post(dDomain + "meeting/api/v1/meeting", data, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${token.token}`,
+          // Authorization: `Bearer ${token.token}`,
         },
       });
       // console.log(res.data, "the startMeeting D");
@@ -358,14 +358,14 @@ export const AuthProvider = ({ children }) => {
   const callJoinMeetingApi = async (id) => {
     try {
       // console.log(token.token);
-      const token = await reconcileJWT();
+      // const token = await reconcileJWT();
       // console.log("meeting token", meetingAuth);
       let config = {
         method: "get",
         url: `${dDomain}meeting/api/v1/join/${id}?passcode=12345&end_meeting_redirect_url=https://blackboxnow.com/profile&display_name=${user.first_name}%20${user.last_name}&mute_audio_on_start=true&include_video=true&include_audio=true&water_mark_image_png=https://res.cloudinary.com/black-box/image/upload/v1672752016/buqwsbiz9lp2rezinn5t.jpg&water_mark_image_link=https://blackboxnow.com/`,
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${token.token}`,
+          // Authorization: `Bearer ${token.token}`,
         },
       };
       const res = await axios(config);
@@ -380,8 +380,8 @@ export const AuthProvider = ({ children }) => {
 
   const callStartMeeting = async (meeting_name) => {
     try {
-      dvc.getReconcileJwt(authTokens);
-      dvc.setShowFeedback(false);
+      // dvc.getReconcileJwt(authTokens);
+      // dvc.setShowFeedback(false);
       let config = {
         // default: false,
         audio_only: false,
@@ -403,10 +403,10 @@ export const AuthProvider = ({ children }) => {
       //   username: "someuser@gmail.com",
       //   user_id: "123e4567-e89b-12d3-a456-426614174000",
       // },
-      const res = await dvc // this variable represents the instance of the DvcSDK class
-        .startMeeting(config); // instance method to start meeting taking in config as object
+      // const res = await dvc // this variable represents the instance of the DvcSDK class
+        // .startMeeting(config); // instance method to start meeting taking in config as object
       // console.log(res.data, "the meeting de");
-      return res.data;
+      // return res.data;
     } catch (err) {
       console.log(err);
     }
@@ -450,8 +450,8 @@ export const AuthProvider = ({ children }) => {
       }
       if (allow) {
         // console.log(authTokens, "the token");
-        dvc.getReconcileJwt(authTokens);
-        dvc.setShowFeedback(false);
+        // dvc.getReconcileJwt(authTokens);
+        // dvc.setShowFeedback(false);
         // dvc.setWaterMarkImagePng(
         //   "https://blackboxnow.com/static/media/blackbox-logo-01.86234ed62aef14383960.png",
         // );
@@ -476,10 +476,10 @@ export const AuthProvider = ({ children }) => {
         // water_mark_image_png:
         //   "https://blackboxnow.com/static/media/blackbox-logo-01.86234ed62aef14383960.png",
         // water_mark_image_link: "https://blackboxnow.com/",
-        const res = await dvc.joinMeeting(params);
+        // const res = await dvc.joinMeeting(params);
         // console.log(res);
         setLoading((pre) => !pre);
-        return res.data;
+        // return res.data;
       }
       if (type !== "ses" || type !== "cls" || course_id === 0) {
         errorToast("Invalid url");
@@ -1572,7 +1572,7 @@ export const AuthProvider = ({ children }) => {
     setStartMeeting,
     meetingAuth,
     setMeetingAuth,
-    reconcileJWT,
+    // reconcileJWT,
     refreshJWT,
     callJoinMeeting,
     callJoinMeetingApi,
