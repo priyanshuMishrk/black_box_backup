@@ -251,13 +251,13 @@ useEffect(() => {
                       }
                       </li>
 
-                      <li>{
+                      {/* <li>{
                         !isInputVisible &&
                         <Link to="/classroomV2" className={navb ? "link clr" : "link2 clr"}>
                           CLASSROOM
                         </Link>
                       }
-                      </li>
+                      </li> */}
 
                       {/* <li>{
                         !isInputVisible && adminAllow === true &&

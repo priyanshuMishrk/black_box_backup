@@ -124,7 +124,7 @@ function App() {
               <Route path="/review/:roomid" element={<ReviewClassCourse/>}/>
               
 
-              <Route path="/classroom/join/:id" element={<ClassroomJoinForm/>}/>
+              {/* <Route path="/classroom/join/:id" element={<ClassroomJoinForm/>}/> */}
 
               <Route path="/class/join/:roomid" element={<JoinClass/>}/>
               <Route path="/class/start" element={<ClassEnter/>}/>
@@ -192,17 +192,17 @@ function App() {
               <Route path="/terms" element={<Terms />} />
 
               {/* <Route path="/classroom/login" element={<ClassroomLogin />} /> */}
-              <Route
+              {/* <Route
                 path="/classroom/register"
                 element={<SignUpClr />}
               />
               <Route path="/classroom/edit" element={<Editclssroom />} />
               <Route path="/classroom" element={<Classroom />} />
-              <Route path="/classroom/host" element={<Hostclassroom />} />
+              <Route path="/classroom/host" element={<Hostclassroom />} /> */}
 
               <Route path="/login" element={<Login />} />
-              <Route path="/loginClr" element={<LoginClr />} />
-              <Route path="/signupClr" element={<SignUpClr />} />
+              {/* <Route path="/loginClr" element={<LoginClr />} />
+              <Route path="/signupClr" element={<SignUpClr />} /> */}
               <Route path="/otplogin" element={<Otp />} />
               <Route path="/otpverify" element={<OtpVerify />} />
               <Route path="/change-password" element={<Change />} />
@@ -217,13 +217,13 @@ function App() {
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/cal" element={<CalendarIcon/>}/>
               <Route path="/teaching" element={<TeachFlowFirst/>} />
-              <Route path="/classroomv2" element={<ClassroomFlowFirst/>} />
+              {/* <Route path="/classroomv2" element={<ClassroomFlowFirst/>} />
               <Route path="/classroomv2/join" element={<ClassroomFlowSecond/>} />
               <Route path="/classroomv2/hub" element={<ClassroomHub/>} />
               <Route path="/classroomv2/hub/host" element={<ClassrHostLL/>} />
               <Route path="/classroomv2/session/:id" element={<JoinTheSession />} />
               <Route path="/classroomv2/meet/:clid/:roomid" element={<JoinSession />} />
-              <Route path="/classroomv2/host/:clid/:roomid" element={<HostSession />} />
+              <Route path="/classroomv2/host/:clid/:roomid" element={<HostSession />} /> */}
             </Routes>
             </SocketProvider>
           </AuthProvider>
