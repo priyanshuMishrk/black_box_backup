@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Footer from "../../Components/Common/Footer";
 import Header from "../../Components/Common/Header";
+import DefaultPic from "../../Images/defualtProPic.jpg";
 import ImageSlider from "../../Components/Home/ImageSliderStream";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import clock from "../../Images/clock.svg"
@@ -38,6 +39,12 @@ const JoinTheClass = () => {
             ? JSON.parse(localStorage.getItem("authTokens"))
             : null,
     );
+
+    function isCloudinaryUrl(url) {
+        if (!url) return false
+        const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+        return !cloudinaryPattern.test(url);
+      }
 
     const [canVerify, setCanVerify] = useState(false)
 
@@ -737,7 +744,7 @@ const JoinTheClass = () => {
                         </span>
 
                         <div className="d-flex ljdojasy">
-                           {currentClass && currentClass.user && currentClass.user.img_thumbnail && <span>
+                           {currentClass && currentClass.user && currentClass.user.img_thumbnail && isCloudinaryUrl(currentClass.user.img_thumbnail) && <span>
                                 <img src={currentClass && currentClass.user && currentClass.user.img_thumbnail} className="imgInPr55" alt="" />
                             </span>}
                             <div className="introInPr">

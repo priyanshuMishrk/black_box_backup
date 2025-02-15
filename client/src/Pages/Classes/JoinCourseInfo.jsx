@@ -25,6 +25,7 @@ import copyLink from '../../Images/copy.svg'
 import blackkkyy from '../../blackbox-logo-01.png'
 import cal2 from '../../Images/clal.svg'
 import Tooltip from "@mui/material/Tooltip";
+import DefaultPic from "../../Images/defualtProPic.jpg";
 
 const JoinTheClass = () => {
     const currentLink = window.location.href;
@@ -32,6 +33,11 @@ const JoinTheClass = () => {
     const {
         user
     } = useContext(AuthContext);
+    function isCloudinaryUrl(url) {
+        if (!url) return false
+        const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+        return !cloudinaryPattern.test(url);
+      }
 
     const [canVerify, setCanVerify] = useState(false)
 
@@ -782,7 +788,7 @@ const JoinTheClass = () => {
                         </span>
 
                         <div className="d-flex ljdojasy">
-                            {currentClass && currentClass.user && currentClass.user.img_thumbnail && <span>
+                            {currentClass && currentClass.user && currentClass.user.img_thumbnail && isCloudinaryUrl(currentClass.user.img_thumbnail) && <span>
                                 <img src={currentClass && currentClass.user && currentClass.user.img_thumbnail} className="imgInPr55" alt="" />
                             </span>}
                             <div className="introInPr">

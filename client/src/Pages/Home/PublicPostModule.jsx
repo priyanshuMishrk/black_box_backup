@@ -374,11 +374,17 @@ const PublicPostModule = ({ index, data }) => {
         };
     }, []);
 
+    function isCloudinaryUrl(url) {
+        if (!url) return false
+        const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+        return !cloudinaryPattern.test(url);
+      }
+
     return (
         <div className="publicPostAtHomePage" key={index}>
             <div className="publicPostHeader">
                 <div className="PPHimgThumbnail">
-                    <img src={data.user.img_thumbnail ? data.user.img_thumbnail : DefaultPic} key={index} alt="" />
+                    <img src={isCloudinaryUrl(data.user.img_thumbnail) ? data.user.img_thumbnail : DefaultPic} key={index} alt="" />
                 </div>
                 <div>
                     <div className="nameATime">
