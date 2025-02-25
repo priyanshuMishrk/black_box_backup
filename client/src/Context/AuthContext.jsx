@@ -10,10 +10,10 @@ import StyleContext from "./StyleContext";
 const AuthContext = createContext();
 export default AuthContext;
 
-// export const BaseUrl = "http://localhost:3001/api";
+export const BaseUrl = "http://localhost:3001/api";
 export const dDomain = "https://test-blackis.dolphinvc.com/";
 
-export const BaseUrl = "/api";
+// export const BaseUrl = "/api";
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();

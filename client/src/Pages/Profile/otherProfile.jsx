@@ -13,6 +13,8 @@ import { useContext } from "react";
 import AuthContext, { BaseUrl } from "../../Context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../Components/Common/Header";
+// import PublicPostModule from "../Home/PublicPostModule";
+import defaultPic from '../../Images/defualtProPic.jpg';
 import Footer from "../../Components/Common/Footer";
 import editProfile from "../../Images/Editprofile.svg";
 import myclass from "../../Images/myclass.svg";
@@ -106,6 +108,30 @@ function OtherProfileV8(props) {
                 console.error('Failed to copy: ', err);
             });
     };
+
+    const [followers, setFollowers] = useState(0);
+    const [following, setFollowing] = useState(0);
+  
+    useEffect(() => {
+        const fetchConnections = async () => {
+          try {
+            const response = await axios.get(`/connections/${id2}`);
+            setFollowers(response.data.followers);
+            setFollowing(response.data.following);
+          } catch (error) {
+            console.error('Error fetching connections:', error);
+          }
+        };
+      
+        // Fetch initially
+        fetchConnections();
+      
+        // Set interval to fetch data every 5 seconds
+        const interval = setInterval(fetchConnections, 1000);
+      
+        // Cleanup function to clear interval when component unmounts
+        return () => clearInterval(interval);
+      }, [id2])
 
 
     let [name, setName] = useState('');
@@ -322,6 +348,25 @@ function OtherProfileV8(props) {
     function clickedOnShare() {
         setShareOper(!shareOpen)
     }
+
+    const handleFollow = async () => {
+        try {
+          await axios.patch(`${BaseUrl}/follow`, { ownerId: id, targetUserId : id2 });
+          // Refresh follower/following count after follow action
+          const response = await axios.get(`/connections/${id2}`);
+          setFollowers(response.data.followers);
+          setFollowing(response.data.following);
+        } catch (error) {
+          console.error('Error following user:', error);
+        }
+      };
+    
+
+    function isCloudinaryUrl(url) {
+        if (!url) return false
+        const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+        return !cloudinaryPattern.test(url);
+      }
 
 
     const [openD, setOpenD] = useState(false)
@@ -552,7 +597,7 @@ function OtherProfileV8(props) {
                 </div>
                 <div className="userDetails">
                     <div className={`theProfilePic ${isTeacher && 'teacherIsHere'}`}>
-                        <img className="theImg" src={propic} alt="" />
+                        <img className="theImg" src={isCloudinaryUrl(propic)?propic:defaultPic} alt="" />
 
                         {isTeacher &&
                             <span className="tagOfUser fmfont">
@@ -615,13 +660,16 @@ function OtherProfileV8(props) {
                                     </div>
                                 </div>}
                             </div>
+                            <span className="shareProfilejjjkkk cp fmfont" onClick={handleFollow}>
+                                    Follow
+                                </span>
                         </div>
 
 
                         <div className="followHollowJollow">
                             <div className="infooo">
                                 <span className="frfont">
-                                    0
+                                    {followers}
                                 </span>
                                 <span className="fmfont">
                                     Followers
@@ -631,10 +679,10 @@ function OtherProfileV8(props) {
 
                             <div className="infooo">
                                 <span className="frfont">
-                                    0
+                                    {following}
                                 </span>
                                 <span className="fmfont">
-                                    Friends
+                                Following
                                 </span>
                             </div>
 

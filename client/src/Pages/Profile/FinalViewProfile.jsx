@@ -38,6 +38,11 @@ import { useRef } from "react";
 function MyProfileV8(props) {
 
     const nava = useNavigate()
+    function isCloudinaryUrl(url) {
+        if (!url) return false
+        const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+        return !cloudinaryPattern.test(url);
+      }
 
     const [authTokens, setAuthTokens] = useState(() =>
         localStorage.getItem("authTokens")
@@ -648,7 +653,8 @@ function MyProfileV8(props) {
                 </div>
                 <div className="userDetails">
                     <div className={`theProfilePic ${isTeacher && 'teacherIsHere'}`} >
-                        <img className="theImg" src={propic ? propic : defaultPic} alt="" />
+                        <img className="theImg" src={isCloudinaryUrl(propic) ? propic : defaultPic
+                        } alt="" />  /////////siuiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
                         <div ref={dropDownRef}>
                         <img src={editIcon}
                             onClick={() => {

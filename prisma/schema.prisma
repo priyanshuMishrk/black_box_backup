@@ -114,6 +114,10 @@ model Cart {
   courses   Course_V[]
 }
 
+
+
+
+
 model Wishlist {
    id        Int       @id @default(autoincrement())
   user      Users     @relation(fields: [user_id], references: [id])
@@ -540,3 +544,12 @@ model Message {
   content     String   // Message content
   timestamp   DateTime @default(now()) // Time the message was sent
 }
+
+
+model Connections {
+  id          Int   @id @default(autoincrement()) 
+  ownerId     Int
+  followers   Int[]
+  following   Int[]
+}
+

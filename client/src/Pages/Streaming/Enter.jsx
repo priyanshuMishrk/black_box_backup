@@ -731,7 +731,7 @@ const StreamEnterHome = () => {
 
           </div>
           <div className="title gb">
-            Streaming
+            Earlier
           </div>
           <div className="box2 box22">
 

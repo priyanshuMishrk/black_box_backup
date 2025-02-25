@@ -67,6 +67,13 @@ const MainV2 = () => {
         navigate('/teaching')
     }
 
+    function isCloudinaryUrl(url) {
+        if (!url) return false
+        const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+        return !cloudinaryPattern.test(url);
+      }
+
+      
     const [courses, setCls] = useState([])
 
     function filterObjects(objects) {

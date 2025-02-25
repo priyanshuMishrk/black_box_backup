@@ -1972,7 +1972,92 @@ userInfo.post("/boughtClass", authorizationToken, async (req, res) => {
   }
 });
 
+userInfo.patch('/follow', async (req, res) => {
+  try {
+    let { ownerId, targetUserId } = req.body;
+    ownerId = parseInt(ownerId)
+    targetUserId = parseInt(targetUserId)
+    
+    if (!ownerId || !targetUserId) {
+      return res.status(400).json({ error: 'ownerId and targetUserId are required' });
+    }
 
+    // Fetch current connections for the owner
+    let ownerConnection = await prisma.connections.findMany({
+      where: { ownerId },
+    });
+
+    // If the owner doesn't have a connections record, create one
+    if (!ownerConnection[0]) {
+      ownerConnection = await prisma.connections.create({
+        data: {
+          ownerId,
+          followers: [],
+          following: [targetUserId],
+        },
+      });
+    } else {
+      // Add targetUserId to following if not already following
+      if (!ownerConnection[0].following.includes(targetUserId)) {
+        ownerConnection = await prisma.connections.updateMany({
+          where: { ownerId },
+          data: { following: { push: targetUserId } },
+        });
+      }
+    }
+
+    // Fetch or create target user's connections
+    let targetConnection = await prisma.connections.findMany({
+      where: { ownerId: targetUserId },
+    });
+
+    if (!targetConnection[0]) {
+      targetConnection = await prisma.connections.create({
+        data: {
+          ownerId: targetUserId,
+          followers: [ownerId],
+          following: [],
+        },
+      });
+    } else {
+      // Add ownerId to followers if not already in the list
+      if (!targetConnection[0].followers.includes(ownerId)) {
+        targetConnection = await prisma.connections.updateMany({
+          where: { ownerId: targetUserId },
+          data: { followers: { push: ownerId } },
+        });
+      }
+    }
+
+    return res.json({ message: 'Followed successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get followers and following count
+userInfo.get('/connections/:ownerId', async (req, res) => {
+  try {
+    const ownerId = Number(req.params.ownerId);
+    
+    const connection = await prisma.connections.findMany({
+      where: { ownerId },
+    });
+    
+    if (!connection[0]) {
+      return res.json({ followers: 0, following: 0 });
+    }
+    
+    return res.json({
+      followers: connection[0].followers.length,
+      following: connection[0].following.length,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 module.exports = userInfo;

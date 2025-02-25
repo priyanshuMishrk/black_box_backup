@@ -5,6 +5,7 @@ import AuthContext, { BaseUrl } from "../../Context/AuthContext";
 import  ReactCardFlip  from 'react-card-flip';
 import Card from "./Card";
 import axios from "axios";
+import defaultPic from '../../Images/defualtProPic.jpg'
 // import ReadMoreReact from "read-more-react";
 // import $ from "jquery";
 
@@ -67,6 +68,12 @@ const Classes = () => {
             ? JSON.parse(localStorage.getItem("authTokens"))
             : null,
     );
+
+    function isCloudinaryUrl(url) {
+      if (!url) return false
+      const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+      return !cloudinaryPattern.test(url);
+    }
 
   useEffect( ()=>{
     async function getter(){
@@ -348,7 +355,7 @@ const Classes = () => {
                                 }}
                               >  
                                 <div>
-                                  <img src={cls.user.img_thumbnail} alt="host"
+                                  <img src={isCloudinaryUrl(cls.user.img_thumbnail)? cls.user.img_thumbnail : defaultPic} alt="host" //esfmsomfosmfosmdfomsdfmsdmfdsodfmsdfomsofmmsfcoms
                                   style={{
                                     width : "4vw",
                                     height : "4vw",
