@@ -650,10 +650,10 @@ const JoinTheClass = () => {
                                 modules={[Navigation, Pagination, Autoplay]}
                                 spaceBetween={100}
                                 slidesPerView={1}
-                                // navigation={{
-                                //     nextEl: ".swiper-button-next",
-                                //     prevEl: ".swiper-button-prev",
-                                //   }} // Show arrows only if more than one media
+                                navigation={{
+                                    nextEl: ".swiper-button-next",
+                                    prevEl: ".swiper-button-prev",
+                                  }} // Show arrows only if more than one media
                                 pagination={{ clickable: true }}
                                 autoplay={{
                                     delay: 4000,
@@ -697,8 +697,8 @@ const JoinTheClass = () => {
                                 })}
                             </Swiper>
 
-                            {/* <div className="swiper-button-prev">{'<'}</div>
-                            <div className="swiper-button-next">{'>'}</div> */}
+                            <div className="swiper-button-prev">{'<'}</div>
+                            <div className="swiper-button-next">{'>'}</div>
                             </div>
 
                             {/* Close Button in Fullscreen */}
