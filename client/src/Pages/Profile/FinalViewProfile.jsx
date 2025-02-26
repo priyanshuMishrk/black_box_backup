@@ -654,7 +654,7 @@ function MyProfileV8(props) {
                 <div className="userDetails">
                     <div className={`theProfilePic ${isTeacher && 'teacherIsHere'}`} >
                         <img className="theImg" src={isCloudinaryUrl(propic) ? propic : defaultPic
-                        } alt="" />  /////////siuiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+                        } alt="" /> 
                         <div ref={dropDownRef}>
                         <img src={editIcon}
                             onClick={() => {

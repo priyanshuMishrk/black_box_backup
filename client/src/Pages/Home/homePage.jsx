@@ -820,6 +820,12 @@ const LoggedInHP = () => {
 
     const elementRef22 = useRef(null);
 
+    function isCloudinaryUrl(url) {
+        if (!url) return false
+        const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
+        return !cloudinaryPattern.test(url);
+      }
+
     useEffect(() => {
         // Function to handle click event
         const handleClickOutside = (event) => {
@@ -899,8 +905,8 @@ const LoggedInHP = () => {
                     <div className="firstHLIP">
                         <div className="f1HLIP">
                             <div className="imgForHostF1HLIP">
-                                {prop ? (
-                                    propic ? (
+                                {isCloudinaryUrl(prop) ? (
+                                    isCloudinaryUrl(propic) ? (
                                         <img
                                             width={100}
                                             height={100}

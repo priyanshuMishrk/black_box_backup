@@ -25,6 +25,11 @@ import email from '../../Images/mail.svg'
 import copyLink from '../../Images/copy.svg'
 import blackkkyy from '../../blackbox-logo-01.png'
 import Tooltip from "@mui/material/Tooltip";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 
 const JoinTheClass = () => {
@@ -44,7 +49,7 @@ const JoinTheClass = () => {
         if (!url) return false
         const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
         return !cloudinaryPattern.test(url);
-      }
+    }
 
     const [canVerify, setCanVerify] = useState(false)
 
@@ -358,18 +363,18 @@ const JoinTheClass = () => {
 
         if (currentClass.free) {
             const id = currentClass.id
-                const url = `${BaseUrl}/boughtClass?id=${id}`
-                const data = {
-                    id
+            const url = `${BaseUrl}/boughtClass?id=${id}`
+            const data = {
+                id
+            }
+            const res = await axios.post(url,
+                data,
+                {
+                    params: data,
+                    headers: { Authorization: `Bearer ${authTokens}` },
                 }
-                const res = await axios.post(url,
-                    data,
-                    {
-                        params: data,
-                        headers: { Authorization: `Bearer ${authTokens}` },
-                    }
-                );
-                return alert('Class Joined')
+            );
+            return alert('Class Joined')
         }
 
 
@@ -435,8 +440,8 @@ const JoinTheClass = () => {
                         headers: { Authorization: `Bearer ${authTokens}` },
                     }
                 );
-                
-                
+
+
                 setTimeout(() => {
                     alert("Payment Successful");
                 }, 2000);
@@ -455,6 +460,44 @@ const JoinTheClass = () => {
 
     const [srcc1, setSrcc1] = useState()
     const [open, setOpen] = useState(false)
+
+
+    function onpeImg(srrc) {
+        setSrcc1(srrc)
+        setOpen(true)
+    }
+
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const swiperRef = useRef(null);
+    const videoRef = useRef(null);
+
+    // List of valid image formats
+    const imageFormats = [".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp"];
+
+    // List of valid video formats
+    const videoFormats = [".mp4", ".webm", ".mkv", ".mov", ".avi"];
+
+    // Function to check if the URL is an image
+    const isImage = (url) => imageFormats.some((ext) => url.toLowerCase().endsWith(ext));
+
+    // Function to check if the URL is a video
+    const isVideo = (url) => videoFormats.some((ext) => url.toLowerCase().endsWith(ext));
+
+    // Function to open fullscreen
+    const openFullscreen = (element) => {
+        if (element.requestFullscreen) {
+            element.requestFullscreen().then(() => setIsFullscreen(true));
+        }
+    };
+
+    // Function to close fullscreen
+    const closeFullscreen = () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            setIsFullscreen(false);
+        }
+    };
+
     if (noContent) {
         return (
             <>
@@ -462,12 +505,6 @@ const JoinTheClass = () => {
                 <h1 className="mt-10">Please Login with your email id and then click on email link again</h1>
             </>
         )
-    }
-
-
-    function onpeImg(srrc) {
-        setSrcc1(srrc)
-        setOpen(true)
     }
 
     return (
@@ -494,7 +531,7 @@ const JoinTheClass = () => {
                 </div>
                 <div className="blackBannerInClassEButtonSection">
                     <div className="gsb blackBannerInClassErupee">
-                    {currentClass && !currentClass.free ? `₹ ${currentClass.price}` : "Free"}
+                        {currentClass && !currentClass.free ? `₹ ${currentClass.price}` : "Free"}
                     </div>
                     <div className="gsb blackBannerInClassEnroll">
                         <button onClick={() => checkBeforeJoining(1)}>Buy Now</button>
@@ -605,112 +642,165 @@ const JoinTheClass = () => {
                         {/* <div className="CPR2Studs gm">
                             15  students, 4 seats left
                         </div> */}
-
                     </div>
                     <div className="CPR2BImage">
+
                         <div className="imgInCPR2B">
-                            <img className="cp" src={currentClass && currentClass.img[0].url} onClick={() => onpeImg(currentClass.img[0].url)} alt="" />
-                            <Lightbox
-                                open={open}
-                                close={() => setOpen(false)}
-                                slides={[
-                                    { src: srcc1 }
-                                ]}
-                            />
+                            <Swiper
+                                modules={[Navigation, Pagination, Autoplay]}
+                                spaceBetween={100}
+                                slidesPerView={1}
+                                // navigation={{
+                                //     nextEl: ".swiper-button-next",
+                                //     prevEl: ".swiper-button-prev",
+                                //   }} // Show arrows only if more than one media
+                                pagination={{ clickable: true }}
+                                autoplay={{
+                                    delay: 4000,
+                                    disableOnInteraction: true,
+                                }}
+                                onSlideChange={() => {
+                                    if (videoRef.current?.paused === false) {
+                                        swiperRef.current?.autoplay.stop(); // Stop autoplay if video is playing
+                                    }
+                                }}
+                                ref={swiperRef}
+                            >
+                                {currentClass?.img.map((item, i) => {
+                                    const fileUrl = item.url.toLowerCase();
+                                    return (
+                                        <SwiperSlide key={i}>
+                                            {isVideo(fileUrl) ? (
+                                                <video
+                                                    ref={videoRef}
+                                                    src={item.url}
+                                                    controls
+                                                    onPlay={() => swiperRef.current?.autoplay.stop()} // Pause autoplay when playing video
+                                                    onPause={() => swiperRef.current?.autoplay.start()} // Resume autoplay when paused
+                                                    onClick={() => openFullscreen(videoRef.current)} // Click to
+                                                    autoPlay={true}
+                                                    muted
+                                                    // toggle fullscreen
+                                                />
+                                            ) : isImage(fileUrl) ? (
+                                                <img
+                                                    className="cp"
+                                                    src={item.url}
+                                                    alt=""
+                                                    onClick={(e) => openFullscreen(e.target)} // Click to toggle fullscreen
+                                                />
+                                            ) : (
+                                                <p style={{ textAlign: "center", color: "red" }}>Unsupported format</p>
+                                            )}
+                                        </SwiperSlide>
+                                    );
+                                })}
+                            </Swiper>
+
+                            {/* <div className="swiper-button-prev">{'<'}</div>
+                            <div className="swiper-button-next">{'>'}</div> */}
+                            </div>
+
+                            {/* Close Button in Fullscreen */}
+                            {/* {isFullscreen && (
+                                <button className="close-btn" onClick={closeFullscreen}>
+                                    ✖
+                                </button>
+                            )} */}
+
+                            <div className="imgInformation">
+                                <div className="informationInfo">
+                                    <div className="priceyyy gb">
+                                        {currentClass && !currentClass.free ? `₹ ${currentClass.price}` : "Free"}
+                                    </div>
+                                    <div className="slotsssss gm">
+                                        Slots filling in soon
+                                    </div>
+
+                                </div>
+                                <div className="jjjssskkkkssskkk">
+                                    <Tooltip title={`${currentWish === 1 ? 'Add to wishlist' : 'Added to wishlist'}`}>
+                                        <img className="wishIconHahahaha" src={currentWish === 1 ? wishlist : currentWish === 2 ? wishlist2 : currentWish === 3 ? wishlist3 : currentWish === 4 ? wishlist4 : ""} onMouseEnter={controllingHover} onMouseLeave={controllingHoverOff} onClick={clickController} alt="" />
+
+                                    </Tooltip>
+
+                                    <img src={share} onClick={() => clickedOnShare(2)} alt="" />
+                                    {shareOpen === 2 &&
+                                        <div className="share-options2 fmfont"
+                                            onClick={() => clickedOnShare(0)}
+                                        >
+                                            <div
+                                                onClick={handleCopy}
+                                            >
+                                                <img src={copyLink} alt="" /> Copy Link
+                                            </div>
+                                            <a
+                                                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(currentLink)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img src={whatsapp} alt="" />  WhatsApp
+                                            </a>
+                                            <a
+                                                href={`mailto:?subject=Check this out&body=${encodeURIComponent(currentLink)}`}
+                                            >
+                                                <img src={email} alt="" /> Email
+                                            </a>
+                                        </div>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <button onClick={() => checkBeforeJoining(1)} className="buyNowInTabs gm">{currentClass && currentClass.verified ? "Buy Now" : "Not Verified"}</button>
+                            </div>
+                            <div className="addCartInTabs gm">
+                                <button onClick={() => addedToCart(true)}>{`${inCart ? "✔ Added" : "Add"} to Cart`}</button>
+                                <button onClick={() => giftedFunc(true)} >Gift a friend</button>
+                            </div>
                         </div>
-                        <div className="imgInformation">
-                            <div className="informationInfo">
-                                <div className="priceyyy gb">
-                                    {currentClass && !currentClass.free ? `₹ ${currentClass.price}` : "Free"}
-                                </div>
-                                <div className="slotsssss gm">
-                                    Slots filling in soon
-                                </div>
+                    </div>
 
+                    <div className="Claser mt-5">
+                        <div>
+                            <span className="headingForClassInfo gsb mx-4" >
+                                Class Structure
+                            </span>
+                            <span className="VFDTitle gm w-80 d-block ljdojasy">
+                                <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.classStructure : '' }}>
+
+                                </span>
+
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <div className="headingForClassInfo  gsb mx-4" >
+                                <img src={lien1} className="jjkolmn" alt="" />
+                                Who is this class for?
                             </div>
-                            <div className="jjjssskkkkssskkk">
-                                <Tooltip title={`${currentWish === 1 ? 'Add to wishlist' : 'Added to wishlist'}`}>
-                                    <img className="wishIconHahahaha" src={currentWish === 1 ? wishlist : currentWish === 2 ? wishlist2 : currentWish === 3 ? wishlist3 : currentWish === 4 ? wishlist4 : ""} onMouseEnter={controllingHover} onMouseLeave={controllingHoverOff} onClick={clickController} alt="" />
 
-                                </Tooltip>
+                            <span className="VFDTitle  ljdojasy gm">
+                                <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.studentsWho : '' }}>
 
-                                <img src={share} onClick={() => clickedOnShare(2)} alt="" />
-                                {shareOpen === 2 &&
-                                    <div className="share-options2 fmfont"
-                                        onClick={() => clickedOnShare(0)}
-                                    >
-                                        <div
-                                            onClick={handleCopy}
-                                        >
-                                            <img src={copyLink} alt="" /> Copy Link
-                                        </div>
-                                        <a
-                                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(currentLink)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <img src={whatsapp} alt="" />  WhatsApp
-                                        </a>
-                                        <a
-                                            href={`mailto:?subject=Check this out&body=${encodeURIComponent(currentLink)}`}
-                                        >
-                                            <img src={email} alt="" /> Email
-                                        </a>
-                                    </div>}
-                            </div>
+                                </span>
+                            </span>
                         </div>
 
                         <div>
-                            <button onClick={() => checkBeforeJoining(1)} className="buyNowInTabs gm">{currentClass && currentClass.verified ? "Buy Now" : "Not Verified"}</button>
-                        </div>
-                        <div className="addCartInTabs gm">
-                            <button onClick={() => addedToCart(true)}>{`${inCart ? "✔ Added" : "Add"} to Cart`}</button>
-                            <button onClick={() => giftedFunc(true)} >Gift a friend</button>
-                        </div>
-                    </div>
-                </div>
+                            <div className="headingForClassInfo gsb mx-4 mt-5" >
+                                <img src={lien2} className="jjkolmn" alt="" />
+                                Participant Requirements
+                            </div>
 
-                <div className="Claser mt-5">
-                    <div>
-                        <span className="headingForClassInfo gsb mx-4" >
-                            Class Structure
-                        </span>
-                        <span className="VFDTitle gm w-80 d-block ljdojasy">
-                            <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.classStructure : '' }}>
+                            <span className="VFDTitle  ljdojasy gm">
+                                <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.requirements : '' }}>
 
+                                </span>
                             </span>
-
-                        </span>
-                    </div>
-
-
-                    <div>
-                        <div className="headingForClassInfo  gsb mx-4" >
-                            <img src={lien1} className="jjkolmn" alt="" />
-                            Who is this class for?
                         </div>
 
-                        <span className="VFDTitle  ljdojasy gm">
-                            <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.studentsWho : '' }}>
-
-                            </span>
-                        </span>
-                    </div>
-
-                    <div>
-                        <div className="headingForClassInfo gsb mx-4 mt-5" >
-                            <img src={lien2} className="jjkolmn" alt="" />
-                            Participant Requirements
-                        </div>
-
-                        <span className="VFDTitle  ljdojasy gm">
-                            <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.requirements : '' }}>
-
-                            </span>
-                        </span>
-                    </div>
-
-                    {/* <div>
+                        {/* <div>
                         <div className="headingForClassInfo gsb mx-4 mb-4 mt-5" >
                             <img src={lien2} className="jjkolmn" alt="" />
                             After the class you will be able to
@@ -738,35 +828,35 @@ const JoinTheClass = () => {
                         </span>
                     </div> */}
 
-                    <div>
-                        <span className="headingForClassInfo gsb mx-4" >
-                            About the Trainer
-                        </span>
+                        <div>
+                            <span className="headingForClassInfo gsb mx-4" >
+                                About the Trainer
+                            </span>
 
-                        <div className="d-flex ljdojasy">
-                           {currentClass && currentClass.user && currentClass.user.img_thumbnail && isCloudinaryUrl(currentClass.user.img_thumbnail) && <span>
-                                <img src={currentClass && currentClass.user && currentClass.user.img_thumbnail} className="imgInPr55" alt="" />
-                            </span>}
-                            <div className="introInPr">
-                                <span className="prName cp gsb" onClick={() => {
-                                    dono(`/otherProfile/${currentClass.user.id}`)
-                                }}>
-                                    {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`}
-                                </span>
-                                <span className="VFDTitle gm">
-                                    <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.trainerBio : '' }}>
-
+                            <div className="d-flex ljdojasy">
+                                {currentClass && currentClass.user && currentClass.user.img_thumbnail && isCloudinaryUrl(currentClass.user.img_thumbnail) && <span>
+                                    <img src={currentClass && currentClass.user && currentClass.user.img_thumbnail} className="imgInPr55" alt="" />
+                                </span>}
+                                <div className="introInPr">
+                                    <span className="prName cp gsb" onClick={() => {
+                                        dono(`/otherProfile/${currentClass.user.id}`)
+                                    }}>
+                                        {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`}
                                     </span>
-                                </span>
+                                    <span className="VFDTitle gm">
+                                        <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.trainerBio : '' }}>
+
+                                        </span>
+                                    </span>
+
+                                </div>
 
                             </div>
-
                         </div>
+
                     </div>
 
-                </div>
-
-                {/* <div className="classFinReview mt-5">
+                    {/* <div className="classFinReview mt-5">
 
                     <div className="CPRFDiv">
 
@@ -829,147 +919,147 @@ const JoinTheClass = () => {
                     </div>
                 </div> */}
 
-            </div>
-            <Footer />
-
-            {
-                openAllrev &&
-                <div className="allRev">
-                    <div className="lllsld">
-                        <div className="summary">
-
-                            <span className="average fsbfont">
-                                0
-                            </span>
-                            <span className="titllleee fmfont">
-                                Review
-                            </span>
-
-                        </div>
-                        <div className="reviewList fsbfont">
-                            <span>
-                                No Review Posted Yet
-                            </span>
-                        </div>
-
-                        <img src={blackkkyy} className="lovoovovoovovov" alt="" srcset="" />
-
-                    </div>
-                    <div className="clickOut" onClick={() => {
-                        setAllRev(false)
-                    }}>
-
-                    </div>
                 </div>
-            }
+                <Footer />
 
-            {addCart &&
-                <div className="popupForAddedToCart">
-                    <div className="HeadInPFATC">
-                        <div className="gb one">
-                            Added to cart
-                        </div>
-                        <div className="blw cp two" onClick={() => setAddCart(false)}>
-                            X
-                        </div>
-                    </div>
-                    <div className="InfoInPFATC">
-                        <div className="PFATCIM">
-                            <img src={currentClass && currentClass.img[0].url} onClick={() => onpeImg(currentClass.img[0].url)} className="cp" alt="" />
-                            <Lightbox
-                                open={open}
-                                close={() => setOpen(false)}
-                                slides={[
-                                    { src: srcc1 }
-                                ]}
-                            />
-                        </div>
-                        <div className="PFATCIT">
-                            <span className="o gsb">
-                                {currentClass && currentClass.title && currentClass.title}
-                            </span>
-                            <span className="t gl">
-                                {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`}
-                            </span>
-                            <div className="PFATCITT gl">
-                                <span className="oo">
-                                    {currentClass && formatDate(currentClass.date[0])}
+                {
+                    openAllrev &&
+                    <div className="allRev">
+                        <div className="lllsld">
+                            <div className="summary">
+
+                                <span className="average fsbfont">
+                                    0
                                 </span>
+                                <span className="titllleee fmfont">
+                                    Review
+                                </span>
+
+                            </div>
+                            <div className="reviewList fsbfont">
                                 <span>
-                                    <span className="tttt" style={{ color: "#F8F3E3", textShadow: "-1px 0 #000000A3, 0 1px #000000A3, 1px 0 #000000A3, 0 -1px #000000A3" }}>&#9733;</span>
-                                    <span>0.0</span>
+                                    No Review Posted Yet
                                 </span>
                             </div>
-                            <div className="price gsb">
-                                ₹{currentClass && currentClass.price}
+
+                            <img src={blackkkyy} className="lovoovovoovovov" alt="" srcset="" />
+
+                        </div>
+                        <div className="clickOut" onClick={() => {
+                            setAllRev(false)
+                        }}>
+
+                        </div>
+                    </div>
+                }
+
+                {addCart &&
+                    <div className="popupForAddedToCart">
+                        <div className="HeadInPFATC">
+                            <div className="gb one">
+                                Added to cart
+                            </div>
+                            <div className="blw cp two" onClick={() => setAddCart(false)}>
+                                X
                             </div>
                         </div>
+                        <div className="InfoInPFATC">
+                            <div className="PFATCIM">
+                                <img src={currentClass && currentClass.img[0].url} onClick={() => onpeImg(currentClass.img[0].url)} className="cp" alt="" />
+                                <Lightbox
+                                    open={open}
+                                    close={() => setOpen(false)}
+                                    slides={[
+                                        { src: srcc1 }
+                                    ]}
+                                />
+                            </div>
+                            <div className="PFATCIT">
+                                <span className="o gsb">
+                                    {currentClass && currentClass.title && currentClass.title}
+                                </span>
+                                <span className="t gl">
+                                    {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`}
+                                </span>
+                                <div className="PFATCITT gl">
+                                    <span className="oo">
+                                        {currentClass && formatDate(currentClass.date[0])}
+                                    </span>
+                                    <span>
+                                        <span className="tttt" style={{ color: "#F8F3E3", textShadow: "-1px 0 #000000A3, 0 1px #000000A3, 1px 0 #000000A3, 0 -1px #000000A3" }}>&#9733;</span>
+                                        <span>0.0</span>
+                                    </span>
+                                </div>
+                                <div className="price gsb">
+                                    ₹{currentClass && currentClass.price}
+                                </div>
+                            </div>
 
-                    </div>
-                    <button className="GTCInJCI gsb" onClick={jabababa}>
-                        Go to cart
-                    </button>
-                </div>}
+                        </div>
+                        <button className="GTCInJCI gsb" onClick={jabababa}>
+                            Go to cart
+                        </button>
+                    </div>}
 
 
-            {gifted &&
-                <div className="popupForAddedToCart  jaojdoaajs">
-                    <div className="HeadInPFATC">
-                        <div className="closerTheButtonidinsds fsbfont"
-                            onClick={() => {
-                                giftedFunc(false)
-                            }}
+                {gifted &&
+                    <div className="popupForAddedToCart  jaojdoaajs">
+                        <div className="HeadInPFATC">
+                            <div className="closerTheButtonidinsds fsbfont"
+                                onClick={() => {
+                                    giftedFunc(false)
+                                }}
+                            >
+                                X
+                            </div>
+                            <div className="gsb one drrrrrrr">
+                                Gift this Class
+                            </div>
+                        </div>
+                        <div className="InfoInPFATC">
+                            <div className="PFATCIM">
+                                <img src={currentClass && currentClass.img[0].url} onClick={() => onpeImg(currentClass.img[0].url)} alt="" className="cp" />
+
+                            </div>
+                            <div className="PFATCIT">
+                                <span className="o gsb">
+                                    {currentClass && currentClass.title && currentClass.title}
+                                </span>
+                                <span className="t gl">
+                                    {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`}
+                                </span>
+                                <div className="PFATCITT gl">
+                                    <span className="oo">
+                                        {currentClass && formatDate(currentClass.date[0])}
+                                    </span>
+                                    <span>
+                                        <span className="tttt" style={{ color: "#F8F3E3", textShadow: "-1px 0 #000000A3, 0 1px #000000A3, 1px 0 #000000A3, 0 -1px #000000A3" }}>&#9733;</span>
+                                        <span>0.0</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <input className="iGTC gsb" id="aosdoasd" type="text" placeholder="Recipient Email address" />
+
+                        <textarea className="taGTC gsb" name="message" rows="2" placeholder={`About yourself`}></textarea>
+                        <button onClick={() => {
+                            const emailInput = document.querySelector('#aosdoasd'); // Improved selector
+                            console.log(emailInput)
+                            if (emailInput.value.trim() !== '') {
+                                checkBeforeJoining(1);
+                            } else {
+                                alert('Please enter a valid recipient email address.');
+                            }
+                        }} className="GTCInJCI sgggggggggg gsb"
                         >
-                            X
-                        </div>
-                        <div className="gsb one drrrrrrr">
-                            Gift this Class
-                        </div>
+                            Send Gift
+                        </button>
                     </div>
-                    <div className="InfoInPFATC">
-                        <div className="PFATCIM">
-                            <img src={currentClass && currentClass.img[0].url} onClick={() => onpeImg(currentClass.img[0].url)} alt="" className="cp" />
-
-                        </div>
-                        <div className="PFATCIT">
-                            <span className="o gsb">
-                                {currentClass && currentClass.title && currentClass.title}
-                            </span>
-                            <span className="t gl">
-                                {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`}
-                            </span>
-                            <div className="PFATCITT gl">
-                                <span className="oo">
-                                    {currentClass && formatDate(currentClass.date[0])}
-                                </span>
-                                <span>
-                                    <span className="tttt" style={{ color: "#F8F3E3", textShadow: "-1px 0 #000000A3, 0 1px #000000A3, 1px 0 #000000A3, 0 -1px #000000A3" }}>&#9733;</span>
-                                    <span>0.0</span>
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <input className="iGTC gsb" id="aosdoasd" type="text" placeholder="Recipient Email address" />
-
-                    <textarea className="taGTC gsb" name="message" rows="2" placeholder={`About yourself`}></textarea>
-                    <button onClick={() => {
-                        const emailInput = document.querySelector('#aosdoasd'); // Improved selector
-                        console.log(emailInput)
-                        if (emailInput.value.trim() !== '') {
-                            checkBeforeJoining(1);
-                        } else {
-                            alert('Please enter a valid recipient email address.');
-                        }
-                    }} className="GTCInJCI sgggggggggg gsb"
-                    >
-                        Send Gift
-                    </button>
-                </div>
-            }
-        </>
-    )
+                }
+            </>
+            )
 }
 
-export default JoinTheClass;
+            export default JoinTheClass;

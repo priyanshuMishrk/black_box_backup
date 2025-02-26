@@ -3081,6 +3081,11 @@ li {
   border-right: 0.1vw solid #0000003D;
 }
 
+.imgInCPR2B {
+  position: relative;
+  width: 100%;
+}
+
 .imgInCPR2B img {
   width: 100% !important;
   height: 55vh !important;
@@ -3088,6 +3093,7 @@ li {
   object-position: top; */
   object-fit: contain;
   object-position: center;
+  position: relative;
 }
 
 .CPR2BImage {
@@ -8663,4 +8669,31 @@ input {
   text-align: right;
   border-radius: 25px;
   align-self: self-end;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: white;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute !important;
+}
+
+.swiper-button-prev {
+  right: 46vw !important;
+  /* left: 0px !important; */
+}
+
+.swiper-button-next {
+  right: 0px !important;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 20px;
 }
