@@ -2052,6 +2052,7 @@ userInfo.get('/connections/:ownerId', async (req, res) => {
     return res.json({
       followers: connection[0].followers.length,
       following: connection[0].following.length,
+      followersList : connection[0].followers
     });
   } catch (error) {
     console.error(error);

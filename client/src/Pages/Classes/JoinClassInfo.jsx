@@ -498,6 +498,10 @@ const JoinTheClass = () => {
         }
     };
 
+    const completeBio =  currentClass ? currentClass.trainerBio : ''
+
+    const usingBioToSHow = `${completeBio.split('.')[0]}. ${completeBio.split('.')[1]}`
+
     if (noContent) {
         return (
             <>
@@ -598,13 +602,29 @@ const JoinTheClass = () => {
                         </div>
                         <div className="CPR2Auth" >
                             <span className="geryCirc">
+                            {currentClass && currentClass.user && currentClass.user.img_thumbnail && isCloudinaryUrl(currentClass.user.img_thumbnail) && <span>
+                                    <img src={currentClass && currentClass.user && currentClass.user.img_thumbnail} alt="" />
+                                </span>}
+
+                                {!currentClass || !currentClass.user || !currentClass.user.img_thumbnail || !isCloudinaryUrl(currentClass.user.img_thumbnail) && <span>
+                                    <img src={DefaultPic} alt="" />
+                                </span>}
+                            
 
                             </span>
                             <span className="gl">
                                 By
                             </span>
-                            <span className="CPR2AuthName gm"> {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`} </span>
+                            <span className="CPR2AuthName cp gm" onClick={() => {
+                                        dono(`/otherProfile/${currentClass.user.id}`)
+                                    }}> {currentClass && currentClass.user && `${currentClass.user.first_name} ${currentClass.user.last_name}`} </span>
                         </div>
+
+                        <span className="VFDTitleAuthDDess gm">
+                                        <span dangerouslySetInnerHTML={{ __html: currentClass ? `${usingBioToSHow}.` : '' }}>
+
+                                        </span>
+                                    </span>
 
                         <div className="CPR2AuthDesc frfont" >
                             <span dangerouslySetInnerHTML={{ __html: currentClass ? currentClass.description : '' }}></span>

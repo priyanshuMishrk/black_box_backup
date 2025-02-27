@@ -2843,6 +2843,16 @@ li {
   line-height: 1.4vw;
 }
 
+.VFDTitleAuthDDess {
+  font-size: 1vw;
+  width: 80%;
+  margin-bottom: 0.5vw;
+  /* margin-top: 0.2vw; */
+  letter-spacing: 0px;
+  line-height: 1.4vw;
+  color: #757575b0;
+}
+
 .VFDTitle ul {
   margin-top: 1vw;
   margin-left: 0;
@@ -3009,11 +3019,18 @@ li {
 }
 
 .geryCirc {
-  background-color: #D9D9D9;
+  /* background-color: #D9D9D9; */
   width: 2vw;
   height: 2vw;
   border-radius: 50%;
   margin-right: 0.4vw;
+}
+
+.geryCirc img{
+  width: 2vw;
+  height: 2vw;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .CPR2Auth span {
@@ -5991,13 +6008,13 @@ input {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  margin-right: 55px;
 }
 
 .textNextToDp {
   display: flex;
   margin-left: 30px;
   margin-top: 40px;
-  gap: 55px;
   align-items: center;
 }
 
@@ -6035,6 +6052,33 @@ input {
   letter-spacing: -0.16px;
   border-radius: 2px;
   background: #000;
+  padding: 8px 24px;
+  color: white;
+  margin-right: 2vw;
+}
+
+.shareProfilejjjkkk23 {
+  font-size: 16px !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  /* 150% */
+  letter-spacing: -0.16px;
+  border-radius: 2px;
+  background: #706f6f;
+  padding: 8px 24px;
+  color: white;
+}
+
+.shareProfilejjjkkk22 {
+  font-size: 16px !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  /* 150% */
+  letter-spacing: -0.16px;
+  border-radius: 2px;
+  background: #2d2c2c;
   padding: 8px 24px;
   color: white;
 }
@@ -8674,7 +8718,7 @@ input {
 
 .swiper-button-prev,
 .swiper-button-next {
-  color: white !important;
+  color: black !important;
   /* width: 50px !important;
   height: 40px !important; */
   background:#FFCB00 !important;
@@ -8698,4 +8742,20 @@ input {
 .swiper-button-prev::after,
 .swiper-button-next::after {
   font-size: 2vw;
+}
+
+.StreamEndedImg {
+  width: 100vw;
+  height: 80vh;
+  margin-top: 12vh;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.StreamEndedImg h2 {
+  font-size: 2vw;
+  color: white;
 }

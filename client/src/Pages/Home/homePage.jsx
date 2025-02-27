@@ -299,6 +299,10 @@ const LoggedInHP = () => {
 
     const navigator = useNavigate()
 
+    function streamEnded(){
+        navigator('/streamEnded')
+    }
+
     function takeToTeach() {
         navigator('/teaching')
     }
@@ -1211,7 +1215,7 @@ const LoggedInHP = () => {
                                                 </div>
                                                 <div className="streamingSectionFromHomePage">
                                                     <div className="SSFHP1">
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str9} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1233,7 +1237,7 @@ const LoggedInHP = () => {
 
 
                                                         </div>
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str2} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1255,7 +1259,7 @@ const LoggedInHP = () => {
 
 
                                                         </div>
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str3} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1279,7 +1283,7 @@ const LoggedInHP = () => {
                                                         </div>
                                                     </div>
                                                     <div className="SSFHP1">
-                                                        <div className="boxStreamS">
+                                                        <div className="boxStreamS" onClick={streamEnded}>
                                                             <div className="infoo fmfont">
                                                                 Murlidharan was watching <strong>
                                                                     Playing Tennis : beginner level {' '}
@@ -1290,7 +1294,7 @@ const LoggedInHP = () => {
                                                                 Streamed 2 hours ago
                                                             </div>
                                                         </div>
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str1} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1312,7 +1316,7 @@ const LoggedInHP = () => {
 
 
                                                         </div>
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str4} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1334,7 +1338,7 @@ const LoggedInHP = () => {
 
 
                                                         </div>
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str5} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1358,7 +1362,7 @@ const LoggedInHP = () => {
                                                         </div>
                                                     </div>
                                                     <div className="SSFHP1">
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str6} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1380,7 +1384,7 @@ const LoggedInHP = () => {
 
 
                                                         </div>
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str7} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />
@@ -1402,7 +1406,7 @@ const LoggedInHP = () => {
 
 
                                                         </div>
-                                                        <div className="streamAwesomeBox">
+                                                        <div className="streamAwesomeBox" onClick={streamEnded}>
                                                             <div className="sab1">
                                                                 <img className="img1" src={str8} alt="" />
                                                                 <img className="img2" src={playCirc} alt="" />

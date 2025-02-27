@@ -102,6 +102,7 @@ import LoggedInHP2 from "./Pages/Home/homePageV2";
 import LoginClr from "./Pages/Classroom/ClassroomLogin";
 import SignUpClr from "./Pages/Classroom/ClassroomSignup";
 import ChatsOn from "./Pages/Chats/Enter";
+import StreamEnded from "./Pages/Streaming/StreamEnded";
 
 function App() {
   return (
@@ -217,8 +218,9 @@ function App() {
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/cal" element={<CalendarIcon/>}/>
               <Route path="/teaching" element={<TeachFlowFirst/>} />
-              {/* <Route path="/classroomv2" element={<ClassroomFlowFirst/>} />
-              <Route path="/classroomv2/join" element={<ClassroomFlowSecond/>} />
+              
+               <Route path="/streamEnded" element={<StreamEnded/>} />
+              {/*<Route path="/classroomv2/join" element={<ClassroomFlowSecond/>} />
               <Route path="/classroomv2/hub" element={<ClassroomHub/>} />
               <Route path="/classroomv2/hub/host" element={<ClassrHostLL/>} />
               <Route path="/classroomv2/session/:id" element={<JoinTheSession />} />

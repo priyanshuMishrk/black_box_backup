@@ -208,6 +208,11 @@ const MainV2 = () => {
     //     }
     //     // eslint-disable-next-line
     // }, []);
+
+    function streamEnded(){
+        navigate('/streamEnded')
+    }
+
     useEffect(() => {
         async function getter() {
             const res = await axios.get(BaseUrl + `/classInfo/all`);
@@ -347,7 +352,7 @@ const MainV2 = () => {
                                             </div>
                                             <div className="streamingSectionFromHomePage">
                                                 <div className="SSFHP1">
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str9} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -369,7 +374,7 @@ const MainV2 = () => {
 
 
                                                     </div>
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str2} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -391,7 +396,7 @@ const MainV2 = () => {
 
 
                                                     </div>
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str3} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -415,7 +420,7 @@ const MainV2 = () => {
                                                     </div>
                                                 </div>
                                                 <div className="SSFHP1">
-                                                    <div className="boxStreamS">
+                                                    <div className="boxStreamS" onClick={streamEnded}>
                                                         <div className="infoo fmfont">
                                                         Murlidharan was watching <strong>
                                                         Playing Tennis : beginner level {' '}
@@ -427,7 +432,7 @@ const MainV2 = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str1} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -449,7 +454,7 @@ const MainV2 = () => {
 
 
                                                     </div>
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str4} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -471,7 +476,7 @@ const MainV2 = () => {
 
 
                                                     </div>
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str5} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -495,7 +500,7 @@ const MainV2 = () => {
                                                     </div>
                                                 </div>
                                                 <div className="SSFHP1">
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str6} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -517,7 +522,7 @@ const MainV2 = () => {
 
 
                                                     </div>
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str7} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />
@@ -539,7 +544,7 @@ const MainV2 = () => {
 
 
                                                     </div>
-                                                    <div className="streamAwesomeBox">
+                                                    <div className="streamAwesomeBox" onClick={streamEnded}>
                                                         <div className="sab1">
                                                             <img className="img1" src={str8} alt="" />
                                                             <img className="img2" src={playCirc} alt="" />

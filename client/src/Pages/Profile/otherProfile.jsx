@@ -111,11 +111,14 @@ function OtherProfileV8(props) {
 
     const [followers, setFollowers] = useState(0);
     const [following, setFollowing] = useState(0);
+    const [followingThisId, setFollowingId] = useState(false)
   
     useEffect(() => {
         const fetchConnections = async () => {
           try {
-            const response = await axios.get(`/connections/${id2}`);
+            const response = await axios.get(`${BaseUrl}/connections/${id2}`);
+            console.log("fetching connections 122")
+            if (response.data.followersList.includes(parseInt(id))) setFollowingId(true)
             setFollowers(response.data.followers);
             setFollowing(response.data.following);
           } catch (error) {
@@ -127,7 +130,7 @@ function OtherProfileV8(props) {
         fetchConnections();
       
         // Set interval to fetch data every 5 seconds
-        const interval = setInterval(fetchConnections, 1000);
+        const interval = setInterval(fetchConnections, 3000);
       
         // Cleanup function to clear interval when component unmounts
         return () => clearInterval(interval);
@@ -138,209 +141,6 @@ function OtherProfileV8(props) {
     const [editingIsOn, setEditingIsOn] = useState(false)
 
     const [currentSelected, setCS] = useState(1)
-
-    const data = [
-        {
-            id: 1,
-            images: [
-                "https://bask-s.s3.ap-south-1.amazonaws.com/Imageee/image+1.png "
-            ],
-            description: "<p> Hey everyone! I’m excited to share my latest piece with you all. This painting, titled “Whispers of Twilight,” explores the transition between day and night, capturing that fleeting moment when the sky is painted in the most delicate shades of blue and gold. Let me know what you think in the comments! <br/> #Art #PainterLife #WhispersOfTwilight #NewArt #ArtInProgress #SupportLocalArtists</p>",
-            created_at: "2024-04-30T03:58:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                "img_thumbnail": "https://bask-s.s3.ap-south-1.amazonaws.com/matthieu.jpg",
-                "first_name": "Diya",
-                "last_name": "Joshi",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-
-        },
-        {
-            id: 1,
-            images: [
-                "https://bask-s.s3.ap-south-1.amazonaws.com/Imageee/im3.jpg"
-            ],
-            description: "<p>Nestled in the heart of a quaint village, Manjappa brings to life the timeless art of pottery with a unique touch. As the village potter, he has spent years perfecting the craft, creating stunning, hand-thrown ceramics that reflect the serene beauty of rural life. With a deep connection to nature and tradition, his work is characterized by its earthy glazes and intricate designs inspired by the local landscape. </p>",
-            created_at: "2024-04-30T06:53:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                "img_thumbnail": "https://res.cloudinary.com/black-box/image/upload/v1714460344/pojvl3mjjwdqcfhgivrr.jpg",
-                "first_name": "Anshu",
-                "last_name": "Rathod",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-        },
-        {
-            id: 1,
-            images: ['https://bask-s.s3.ap-south-1.amazonaws.com/Imageee/image+2.png'],
-            description: "<p>I’m thrilled to share my today’s special creation: Triple Berry Cheesecake!  <br/> These bars are a creamy, decadent treat with a graham cracker crust, velvety cheesecake filling, and a vibrant mix of fresh berries on top. Each bite is a burst of fruity goodness combined with a rich, smooth texture that’s simply irresistible.</p>",
-            created_at: "2024-04-27T06:58:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                "img_thumbnail": "https://bask-s.s3.ap-south-1.amazonaws.com/matthieu.jpg",
-                "first_name": "Diya",
-                "last_name": "Joshi",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-        },
-        {
-            id: 1,
-            images: [],
-            description: "<p>Unveiling My Latest Scrapbook Creation! <br/> I’m excited to finally share my latest update on the scrapbook project with you all! Creating this scrapbook has been such a wonderful journey, filled with memories, creativity, and a touch of nostalgia.</p>",
-            created_at: "2024-04-09T06:58:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                "img_thumbnail": "https://bask-s.s3.ap-south-1.amazonaws.com/vinatha-sreeramkumar-A2lvvapscdg-unsplash.jpg",
-                "first_name": "Muskan",
-                "last_name": "Ali",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-        },
-        {
-            id: 1,
-            images: [],
-            description: "<p>Thank you Sharmin, for sharing your extraordinary gift with us. Your writing continues to inspire and uplift, and I’m grateful for every moment spent lost in your words. If you haven’t yet explored their work, I highly recommend diving in you’re in for a remarkable experience!</p>",
-            created_at: "2024-01-31T06:58:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                // "img_thumbnail": "https://res.cloudinary.com/black-box/image/upload/v1714460344/pojvl3mjjwdqcfhgivrr.jpg",
-                "first_name": "Virat",
-                "last_name": "Singh",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-        },
-        {
-            id: 1,
-            images: [],
-            description: "<p>I’m absolutely enchanted by the stunning handcrafted embroidery coming out of Lucknow. Each piece is a testament to the skill and artistry of the local artisans who pour their hearts into every stitch. <br/> The attention to detail and the passion behind these creations are truly remarkable.  </p>",
-            created_at: "2024-04-30T03:58:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                "img_thumbnail": "https://res.cloudinary.com/black-box/image/upload/v1714460344/pojvl3mjjwdqcfhgivrr.jpg",
-                "first_name": "Anshu",
-                "last_name": "Rathod",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-
-        },
-        {
-            id: 1,
-            images: [],
-            description: "<p>I just had to take a moment to express my deep appreciation for Miss Nikita and the incredible class she leads. <br/>  From the calming ambiance to the thoughtful guidance, every session with her is a journey of self-discovery and rejuvenation. Her expertise and passion for yoga shine through in every pose and practice, making each class a transformative experience.  </p>",
-            created_at: "2024-04-30T03:58:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                "img_thumbnail": "https://res.cloudinary.com/black-box/image/upload/v1714460344/pojvl3mjjwdqcfhgivrr.jpg",
-                "first_name": "Anshu",
-                "last_name": "Rathod",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-
-        },
-        {
-            id: 1,
-            images: ['https://bask-s.s3.ap-south-1.amazonaws.com/Imageee/im5.jpg'],
-            description: "<p>What an incredible evening we had at the ESHA Foundation last night! The live classical music performance was nothing short of mesmerizing, and I just had to share how deeply moved I was by the experience.  </p>",
-            created_at: "2024-04-30T03:58:45.464Z",
-            updated_at: "2024-04-30T06:58:45.464Z",
-            user: {
-                "id": 8,
-                "provider": "email/phone",
-                "img_thumbnail": "https://bask-s.s3.ap-south-1.amazonaws.com/sanjoy-sadhukhan-vCaLqx2UufY-unsplash.jpg",
-                "first_name": "Yashwini",
-                "last_name": "Yadav",
-                "email": "asdg@blackis.in",
-                "phone_num": "919999899998",
-                "password": "$2b$12$iAfvZ1wJcFTemsMwbLChz.x0ZrPSB6AASZb07Sc1LstE/jMGghD4i",
-                "about": "I am a software developer",
-                "otp": 0,
-                "verified": false,
-                "admin": false,
-                "created_at": "2024-04-30T06:58:45.464Z",
-                "classroom_id": 1,
-                "updated_at": "2024-04-30T06:58:45.464Z"
-            }
-
-        },
-    ]
 
     const currentLink = window.location.href;
     const [shareOpen, setShareOper] = useState(false)
@@ -353,9 +153,10 @@ function OtherProfileV8(props) {
         try {
           await axios.patch(`${BaseUrl}/follow`, { ownerId: id, targetUserId : id2 });
           // Refresh follower/following count after follow action
-          const response = await axios.get(`/connections/${id2}`);
+          const response = await axios.get(`${BaseUrl}/connections/${id2}`);
           setFollowers(response.data.followers);
           setFollowing(response.data.following);
+          setFollowingId(true)
         } catch (error) {
           console.error('Error following user:', error);
         }
@@ -660,9 +461,12 @@ function OtherProfileV8(props) {
                                     </div>
                                 </div>}
                             </div>
-                            <span className="shareProfilejjjkkk cp fmfont" onClick={handleFollow}>
+                            {!followingThisId && <span className="shareProfilejjjkkk22 cp fmfont" onClick={handleFollow}>
                                     Follow
-                                </span>
+                                </span>}
+                                {followingThisId && <span className="shareProfilejjjkkk23 cp fmfont" onClick={handleFollow}>
+                                    Following
+                                </span>}
                         </div>
 
 
@@ -736,14 +540,14 @@ function OtherProfileV8(props) {
                     Classes
                 </span>
 
-                <span
+                {/* <span
                     onClick={
                         () => setCS(4)
                     }
                     className={`cp ${currentSelected === 4 && "joonie"}`}
                 >
                     Friends
-                </span>
+                </span> */}
             </div>
 
 
@@ -967,7 +771,7 @@ function OtherProfileV8(props) {
 
 
 
-            {
+            {/* {
                 currentSelected === 4 &&
 
                 <div className="classesinProfileOfOther">
@@ -975,7 +779,7 @@ function OtherProfileV8(props) {
                     {dataGiveBack(data2, 2)}
 
                 </div>
-            }
+            } */}
 
             <Footer />
         </div>

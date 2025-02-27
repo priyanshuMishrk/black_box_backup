@@ -446,6 +446,29 @@ function MyProfileV8(props) {
 
     const [uploading, setUploading] = useState(false)
     const [progress , setProgress] = useState(0)
+    const [followers, setFollowers] = useState(0);
+    const [following, setFollowing] = useState(0);
+  
+    useEffect(() => {
+        const fetchConnections = async () => {
+          try {
+            const response = await axios.get(`${BaseUrl}/connections/${uid}`);
+            setFollowers(response.data.followers);
+            setFollowing(response.data.following);
+          } catch (error) {
+            console.error('Error fetching connections:', error);
+          }
+        };
+      
+        // Fetch initially
+        fetchConnections();
+      
+        // Set interval to fetch data every 5 seconds
+        const interval = setInterval(fetchConnections, 3000);
+      
+        // Cleanup function to clear interval when component unmounts
+        return () => clearInterval(interval);
+      }, [uid])
 
 
 
@@ -820,16 +843,16 @@ function MyProfileV8(props) {
 
                             <div className="infooo">
                                 <span className="frfont">
-                                    0
+                                    {following}
                                 </span>
                                 <span className="fmfont">
-                                    Friends
+                                    Following
                                 </span>
                             </div>
 
                             <div className="infooo">
                                 <span className="frfont">
-                                    0
+                                    {followers}
                                 </span>
                                 <span className="fmfont">
                                     Classes Taught
