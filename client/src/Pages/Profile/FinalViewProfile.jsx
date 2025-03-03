@@ -34,6 +34,18 @@ import close from '../../Images/closeIcon.svg'
 import PublicPostModule from "../Home/PublicPostModule";
 import defaultPic from '../../Images/defualtProPic.jpg'
 import { useRef } from "react";
+import AWS from 'aws-sdk';
+
+
+
+const s3 = new AWS.S3({
+    accessKeyId: 'AKIAXYKJWCCAIBD425IC',
+    secretAccessKey: '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',
+    region: 'ap-south-1',
+});
+
+const bucketName = 'blackboxim';
+const cloudfrontUrl = 'https://d2f7i2k65rgoj5.cloudfront.net'; // Your CloudFront URL
 
 function MyProfileV8(props) {
 
@@ -42,7 +54,7 @@ function MyProfileV8(props) {
         if (!url) return false
         const cloudinaryPattern = /^https:\/\/res\.cloudinary\.com\/black-box\/.*/;
         return !cloudinaryPattern.test(url);
-      }
+    }
 
     const [authTokens, setAuthTokens] = useState(() =>
         localStorage.getItem("authTokens")
@@ -400,7 +412,7 @@ function MyProfileV8(props) {
 
         },
     ]
-    
+
 
     const handleCopy = () => {
         const currentUrl = window.location.href;
@@ -427,48 +439,48 @@ function MyProfileV8(props) {
     useEffect(() => {
         // Function to handle the click event
         const handleClickOutside = (event) => {
-          if (dropDownRef.current && !dropDownRef.current.contains(event.target) && imgChangeOn === true) {
-            console.log("clicked outside")
-            // Click is outside the dropDownPPH
-            setICO(false);
-          }
-          console.log("clicked inside")
+            if (dropDownRef.current && !dropDownRef.current.contains(event.target) && imgChangeOn === true) {
+                console.log("clicked outside")
+                // Click is outside the dropDownPPH
+                setICO(false);
+            }
+            console.log("clicked inside")
         };
-    
+
         // Add event listener when the component mounts
         document.addEventListener('click', handleClickOutside);
-    
+
         // Clean up the event listener when the component unmounts
         return () => {
-          document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
-      }, []);
+    }, []);
 
     const [uploading, setUploading] = useState(false)
-    const [progress , setProgress] = useState(0)
+    const [progress, setProgress] = useState(0)
     const [followers, setFollowers] = useState(0);
     const [following, setFollowing] = useState(0);
-  
+
     useEffect(() => {
         const fetchConnections = async () => {
-          try {
-            const response = await axios.get(`${BaseUrl}/connections/${uid}`);
-            setFollowers(response.data.followers);
-            setFollowing(response.data.following);
-          } catch (error) {
-            console.error('Error fetching connections:', error);
-          }
+            try {
+                const response = await axios.get(`${BaseUrl}/connections/${uid}`);
+                setFollowers(response.data.followers);
+                setFollowing(response.data.following);
+            } catch (error) {
+                console.error('Error fetching connections:', error);
+            }
         };
-      
+
         // Fetch initially
         fetchConnections();
-      
+
         // Set interval to fetch data every 5 seconds
         const interval = setInterval(fetchConnections, 3000);
-      
+
         // Cleanup function to clear interval when component unmounts
         return () => clearInterval(interval);
-      }, [uid])
+    }, [uid])
 
 
 
@@ -477,22 +489,22 @@ function MyProfileV8(props) {
             {
                 uploading &&
                 <div className="uploaderForHomePagePP">
-                        <div className="showingUplodingFile">
-                                <span className="fsbfont">
-                                    UPLOADING
-                                </span>
-                                <span className="theUploadedVer2">
-                                    <span style={{
-                                        position : "absolute",
-                                        width : `${progress}%`,
-                                        height : "100%",
-                                        backgroundColor : "#FFCC00",
-                                        borderRadius : "50px"
-                                    }}>
+                    <div className="showingUplodingFile">
+                        <span className="fsbfont">
+                            UPLOADING
+                        </span>
+                        <span className="theUploadedVer2">
+                            <span style={{
+                                position: "absolute",
+                                width: `${progress}%`,
+                                height: "100%",
+                                backgroundColor: "#FFCC00",
+                                borderRadius: "50px"
+                            }}>
 
-                                    </span>
-                                </span>
-                        </div>
+                            </span>
+                        </span>
+                    </div>
                 </div>
             }
             <Header />
@@ -549,26 +561,41 @@ function MyProfileV8(props) {
                 <div className="listter fsbfont">
                     <span>
                         Change Banner
-                        <input type="file" accept={'image/*'} className="asfnirgnerineri"
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="asfnirgnerineri"
                             onChange={async (e) => {
                                 const selectedFile = e.target.files[0];
-                                const formData = new FormData();
-                                formData.append('file', selectedFile);
-                                formData.append('upload_preset', 'i1m10bd7'); // Your Cloudinary upload preset
 
-                                const url = `https://api.cloudinary.com/v1_1/black-box/${'image'}/upload`;
-                                const value = await axios.post(url, formData)
+                                if (!selectedFile) return;
 
-                                const nurl = value.data.secure_url
-                                // localStorage.setItem('propic',nurl)
-                                const turl = `${BaseUrl}/profileDetails/backbanner?id=${user}`
-                                const newD = await axios.patch(turl, {
-                                    img: nurl
-                                })
-                                setICO(false)
-                                setbb(nurl)
-                                console.log(backbanner)
-                            }} />
+                                const fileName = `back-banners/${Date.now()}-${selectedFile.name}`;
+                                const params = {
+                                    Bucket: bucketName,
+                                    Key: fileName,
+                                    Body: selectedFile,
+                                    ContentType: selectedFile.type,
+                                };
+
+                                try {
+                                    const uploadResult = await s3.upload(params).promise();
+                                    const s3FilePath = fileName; // S3 Key (path inside the bucket)
+
+                                    // Construct CloudFront URL
+                                    const nurl = `${cloudfrontUrl}/${s3FilePath}`;
+
+                                    const turl = `${BaseUrl}/profileDetails/backbanner?id=${user}`;
+                                    await axios.patch(turl, { img: nurl });
+
+                                    setICO(false);
+                                    setbb(nurl);
+                                    console.log(nurl); // Log the new back banner URL
+                                } catch (error) {
+                                    console.error('Upload error:', error);
+                                }
+                            }}
+                        />
                     </span>
                     <span onClick={() => {
                         setBCO(false)
@@ -677,71 +704,82 @@ function MyProfileV8(props) {
                 <div className="userDetails">
                     <div className={`theProfilePic ${isTeacher && 'teacherIsHere'}`} >
                         <img className="theImg" src={isCloudinaryUrl(propic) ? propic : defaultPic
-                        } alt="" /> 
+                        } alt="" />
                         <div ref={dropDownRef}>
-                        <img src={editIcon}
-                            onClick={() => {
-                                setICO(true)
-                            }}
-                            className="cp kkksdinsifnr" />
-                        {imgChangeOn && <div className="changeImageOrRemove" >
-                            <div className="listter fsbfont">
-                                <span>
-                                    Change Profile Photo
-                                    <input type="file" accept={'image/*'} className="asfnirgnerineri"
-                                        onChange={async (e) => 
-                                            {
-                                            setUploading(true)
-                                            const selectedFile = e.target.files[0];
-                                            const formData = new FormData();
-                                            formData.append('file', selectedFile);
-                                            formData.append('upload_preset', 'i1m10bd7'); // Your Cloudinary upload preset
+                            <img src={editIcon}
+                                onClick={() => {
+                                    setICO(true)
+                                }}
+                                className="cp kkksdinsifnr" />
+                            {imgChangeOn && <div className="changeImageOrRemove" >
+                                <div className="listter fsbfont">
+                                    <span>
+                                        Change Profile Photo
+                                        {/* /////////////////////////////////////////////////////////////////////////////// */}
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="asfnirgnerineri"
+                                            onChange={async (e) => {
+                                                setUploading(true);
+                                                const selectedFile = e.target.files[0];
 
-                                            const url = `https://api.cloudinary.com/v1_1/black-box/${'image'}/upload`;
-                                            const value = await axios.post(url, formData, {
-                                                onUploadProgress: (progressEvent) => {
-                                                    const total = progressEvent.total;
-                                                    const current = progressEvent.loaded;
-                                                    const percentage = Math.round((current / total) * 100);
-                                                    setProgress(percentage); // Update the upload percentage
+                                                if (!selectedFile) return;
+
+                                                const fileName = `profile-images/${Date.now()}-${selectedFile.name}`;
+                                                const params = {
+                                                    Bucket: bucketName,
+                                                    Key: fileName,
+                                                    Body: selectedFile,
+                                                    ContentType: selectedFile.type,
+                                                };
+
+                                                try {
+                                                    const uploadResult = await s3.upload(params).promise();
+                                                    const s3FilePath = fileName; // S3 Key (path inside the bucket)
+
+                                                    // Construct CloudFront URL
+                                                    const nurl = `${cloudfrontUrl}/${s3FilePath}`;
+
+                                                    localStorage.setItem('propic', nurl);
+                                                    const turl = `${BaseUrl}/profileDetails/image?id=${user}`;
+
+                                                    await axios.patch(turl, { img: nurl });
+
+                                                    setICO(false);
+                                                } catch (error) {
+                                                    console.error('Upload error:', error);
+                                                } finally {
+                                                    setUploading(false);
+                                                    setProgress(0);
+                                                    propic = nurl
                                                 }
-                                            })
+                                            }}
+                                        />
+                                    </span>
+                                    <span onClick={async () => {
+                                        const nurl = ''
+                                        localStorage.setItem('propic', nurl)
+                                        const turl = `${BaseUrl}/profileDetails/image?id=${user}`
+                                        const newD = await axios.patch(turl, {
+                                            img: nurl
+                                        })
+                                        setICO(false)
+                                        propic = defaultPic
+                                    }}>
+                                        Remove Profile Photo
+                                    </span>
+                                    <span onClick={() => {
+                                        setICO(false)
+                                    }}>
+                                        Cancel
+                                    </span>
+                                </div>
+                                <div className="closer">
 
-                                            const nurl = value.data.secure_url
-                                            localStorage.setItem('propic', nurl)
-                                            const turl = `${BaseUrl}/profileDetails/image?id=${user}`
-                                            const newD = await axios.patch(turl, {
-                                                img: nurl
-                                            })
-                                            setICO(false)
-                                            setUploading(false)
-                                            setProgress(0)
-                                            propic = nurl
-                                        }} />
-                                </span>
-                                <span onClick={async () => {
-                                    const nurl = ''
-                                    localStorage.setItem('propic', nurl)
-                                    const turl = `${BaseUrl}/profileDetails/image?id=${user}`
-                                    const newD = await axios.patch(turl, {
-                                        img: nurl
-                                    })
-                                    setICO(false)
-                                    propic = defaultPic
-                                }}>
-                                    Remove Profile Photo
-                                </span>
-                                <span onClick={() => {
-                                    setICO(false)
-                                }}>
-                                    Cancel
-                                </span>
-                            </div>
-                            <div className="closer">
+                                </div>
 
-                            </div>
-
-                        </div>}
+                            </div>}
 
                         </div>
                         {/* <input type="file" accept={'image/*'} className="asfnirgnerineri"

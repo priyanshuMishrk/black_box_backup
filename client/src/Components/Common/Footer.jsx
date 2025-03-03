@@ -5,8 +5,10 @@ import { GrFacebookOption } from "react-icons/gr";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { AiOutlineTwitter } from "react-icons/ai";
 import { FaLinkedinIn } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Footer = (props) => {
+  const nava = useNavigate()
   return (
     <Container
       fluid
@@ -57,13 +59,17 @@ const Footer = (props) => {
                 <FaLinkedinIn size={25} />
               </Col>
             </div>
-            <div className="icon1 mt-5">
+            <div className="icon1 mt-5 cp" onClick={() => {
+          nava('/teaching#faq')
+        }}>
               <h2 className="gl ">FAQs</h2>
               <p className="gl moto">your questions answered</p>
             </div>
           </center>
         </Col>
-        <Col md={4} className="footercol d-none d-md-block">
+        <Col md={4} className="footercol d-none d-md-block cp" onClick={() => {
+          nava('/teaching#faq')
+        }}>
           <center>
             <h2 className="gl ">FAQs</h2>
             <p className="gl moto">your questions answered</p>

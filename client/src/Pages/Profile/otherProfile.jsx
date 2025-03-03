@@ -34,11 +34,14 @@ import { useState } from "react";
 import close from '../../Images/closeIcon.svg'
 import PublicPostModule from "../Home/PublicPostModule";
 import friendsMore from "../../Images/friendMore.svg"
+import { SocketContext } from "../../Context/SocketContext";
 
 function OtherProfileV8(props) {
 
     const { id2 } = useParams();
     const [userProfile, setuserr] = useState({})
+    const socket = useContext(SocketContext)
+    
 
     useEffect(() => {
         async function getPr() {
@@ -154,6 +157,7 @@ function OtherProfileV8(props) {
           await axios.patch(`${BaseUrl}/follow`, { ownerId: id, targetUserId : id2 });
           // Refresh follower/following count after follow action
           const response = await axios.get(`${BaseUrl}/connections/${id2}`);
+        //   socket.emit('sendNotification',{userId: id2})
           setFollowers(response.data.followers);
           setFollowing(response.data.following);
           setFollowingId(true)

@@ -22,6 +22,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@zegocloud/zego-uikit-prebuilt": "^2.0.1",
     "@zoom/meetingsdk": "^3.5.2",
+    "aws-sdk": "^2.1692.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
     "build": "^0.1.4",

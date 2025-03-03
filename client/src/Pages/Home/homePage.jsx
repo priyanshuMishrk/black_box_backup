@@ -42,6 +42,16 @@ import str8 from '../../Images/8LiveStr.avif'
 import str9 from '../../Images/9LiveStr.avif'
 import vijayImg from '../../Images/vijay.svg'
 import StyleContext from "../../Context/StyleContext";
+import AWS from 'aws-sdk';
+
+AWS.config.update({
+    accessKeyId: 'AKIAXYKJWCCAIBD425IC',
+    secretAccessKey: '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',
+    region: 'ap-south-1',
+  });
+  
+  const s3 = new AWS.S3();
+  const bucketName = 'blackboxim';
 
 
 const responsive = {
@@ -304,7 +314,7 @@ const LoggedInHP = () => {
     }
 
     function takeToTeach() {
-        navigator('/teaching')
+        navigator('/teaching#howTo')
     }
 
     const { errorToast, successToast, infoToast } = useContext(StyleContext);
@@ -417,7 +427,7 @@ const LoggedInHP = () => {
                 }
                 else {
                     const dataArray = d3
-                    console.log(dataArray)
+                    // console.log(dataArray)
                     const filteredArray = dataArray.filter(item => item.verified);
                     const d = filterObjects(filteredArray)
                     const k = sortClassesByEarliestDate(d)
@@ -439,7 +449,7 @@ const LoggedInHP = () => {
             }
             else {
                 const dataArray = d3
-                console.log(dataArray)
+                // console.log(dataArray)
                 const filteredArray = dataArray.filter(item => item.verified);
                 const d = filterObjects(filteredArray)
                 const k = sortClassesByEarliestDate(d)
@@ -591,7 +601,7 @@ const LoggedInHP = () => {
 
         )
 
-        console.log(result)
+        // console.log(result)
         setPublicPost({
             id: '',
             images: [],
@@ -752,43 +762,45 @@ const LoggedInHP = () => {
 
     async function changeInImgOrVideo(e) {
         console.log(e.target.accept);
-
-        const formData = new FormData();
-        formData.append('file', e.target.files[0]);
-        formData.append('upload_preset', 'i1m10bd7');
-
-        let url = '';
-        if (e.target.accept === 'image/*') {
-            url = `https://api.cloudinary.com/v1_1/black-box/image/upload`;
-        } else if (e.target.accept === 'video/*') {
-            console.log('video uploading');
-            url = `https://api.cloudinary.com/v1_1/black-box/video/upload`;
-        }
-
+        
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const fileType = file.type.startsWith('image') ? 'images' : 'videos';
+        const fileName = `${Date.now()}-${file.name}`;
+        
+        const params = {
+            Bucket: bucketName,
+            Key: `${fileType}/${fileName}`,
+            Body: file,
+            ContentType: file.type, // Remove ACL
+        };
+        
         setUploading(true); // Set uploading to true before starting the upload
-
+    
         try {
-            const res = await axios.post(url, formData, {
-                onUploadProgress: (progressEvent) => {
-                    const total = progressEvent.total;
-                    const current = progressEvent.loaded;
-                    const percentage = Math.round((current / total) * 100);
-                    setUper(percentage); // Update the upload percentage
-                }
+            const upload = s3.upload(params)
+            
+            upload.on('httpUploadProgress', (progress) => {
+                const percentage = Math.round((progress.loaded / progress.total) * 100);
+                setUper(percentage);
             });
-
-            if (e.target.accept === 'image/*') {
-                setImgForPP(prevState => [...prevState, res.data.secure_url]);
-            } else if (e.target.accept === 'video/*') {
-                setVidForPP(prevState => [...prevState, res.data.secure_url]);
+            
+            const data = await upload.promise();
+            const locationKey = data.Key;
+            if (file.type.startsWith('image')) {
+                setImgForPP(prevState => [...prevState,`https://d2f7i2k65rgoj5.cloudfront.net/${locationKey.split('/'[1])}`]);
+            } else if (file.type.startsWith('video')) {
+                setVidForPP(prevState => [...prevState,`https://d2f7i2k65rgoj5.cloudfront.net/${locationKey.split('/'[1])}`]);
             }
         } catch (error) {
             console.error('Upload error:', error);
         } finally {
             setUploading(false); // Set uploading to false after the upload is done
-            setUper(0)
+            setUper(0);
         }
     }
+    
 
     useEffect(() => {
         setOp(true)

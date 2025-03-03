@@ -79,8 +79,8 @@ function TeachFlowFirst(props) {
                 </div>
 
             </div>
-
-            <div className="TFFsecond gsb">
+                  <div id="howTo"></div>
+            <div className="TFFsecond gsb" >
                 <div className="TFFShead gb">
                 What’s the Black Box advantage?
                 </div>
@@ -121,7 +121,7 @@ function TeachFlowFirst(props) {
                 </div>
             </div>
 
-            <div className="TFFthird gsb">
+            <div className="TFFthird gsb" >
                 <div className="TFFTfirst gb">
                 How to begin
                 </div>
@@ -178,7 +178,7 @@ function TeachFlowFirst(props) {
                 
             </div>
 
-            <div className="TFFfourth gsb">
+            <div className="TFFfourth gsb" id="faq">
 
                 <div className="TFFfourHead gb">
                 In case you have any questions...

@@ -151,6 +151,80 @@ io.on("connection", (socket) => {
     socket.emit("userResult", users);
   });
 
+  socket.on("useAlive", async (userId) => {
+    userId = parseInt(userId)
+    try {
+      const lastUpdate = await prisma.keepAlive.findUnique({
+        where: { userId },
+        select: { updatedAt: true },
+      });
+      console.log('keepingUserASl')
+  
+      const now = new Date();
+      
+      if (!lastUpdate || now - new Date(lastUpdate.updatedAt) > 20000) { // 20 seconds
+        await prisma.keepAlive.upsert({
+          where: { userId },
+          update: { isAlive: true, updatedAt: now },
+          create: { userId, isAlive: true },
+        });
+      }
+    } catch (error) {
+      console.error("Error updating keepAlive status:", error);
+    }
+  });
+
+  socket.on("sendNotification", async (data) => {
+        try {
+            const { userId, title, description, img } = data;
+
+            // Check if user is alive
+            const isAlive = await prisma.keepAlive.findUnique({
+                where: { userId },
+                select: { alive: true }
+            });
+
+            if (!isAlive || !isAlive.alive) {
+                console.log(`User ${userId} is not online. Notification not sent.`);
+                return;
+            }
+
+            // Create the notification in the database
+            const notification = await prisma.notification.create({
+                data: {
+                    userId,
+                    title,
+                    description,
+                    img,
+                    status: "WAITING", // Initially in waiting state
+                }
+            });
+
+            // Emit notification to all rooms the user is part of
+            io.emit(`notification:${userId}`, {
+                id: notification.id,
+                title,
+                description,
+                img,
+                sentAt: new Date(),
+            });
+
+            // Update the notification status to SENT
+            await prisma.notification.update({
+                where: { id: notification.id },
+                data: {
+                    status: "SENT",
+                    sentAt: new Date(),
+                }
+            });
+
+            console.log(`Notification sent to user ${userId}`);
+        } catch (error) {
+            console.error("Error sending notification:", error);
+        }
+    });
+  
+
   socket.on("userEnterChat" , async (data) => {
     const user = parseInt(data.seq)
     const chatRooms = await prisma.chat_rooms.findMany({

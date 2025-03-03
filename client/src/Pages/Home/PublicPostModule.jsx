@@ -477,9 +477,9 @@ const PublicPostModule = ({ index, data }) => {
                         // console.log(element.split('/upload'))
                         // console.log(element)
 
-                        if (element.split('/upload')[0] === 'https://res.cloudinary.com/black-box/image') {
+                        if (element.split('/videos')[0] !== 'https://d2f7i2k65rgoj5.cloudfront.net') {
                             return <img key={index} src={element} alt="" />
-                        } else if (element.split('/upload')[0] === 'https://res.cloudinary.com/black-box/video') {
+                        } else if (element.split('/videos')[0] === 'https://d2f7i2k65rgoj5.cloudfront.net') {
                             return <video key={index} src={element} ref={(el) => (videoRefs.current[index] = el)}
                                 muted
                                 playsInline

@@ -1,47 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AWS from "aws-sdk";
+
+AWS.config.update({
+    accessKeyId: "AKIAXYKJWCCAIBD425IC",
+    secretAccessKey: "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",
+    region: "ap-south-1",
+  });
+  
+  const s3 = new AWS.S3();
+  const bucketName = "blackboxim";
+  const cloudFrontUrl = "https://d2f7i2k65rgoj5.cloudfront.net/";
 
 const UploadBox = ({ type, onUpload, isUploading, setIsUploading }) => {
     const [file, setFile] = useState(null);
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
 
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-
-        if (type === 'video' && selectedFile.size > 10000000) { // 10MB limit
-            setError('Video size should be less than 10MB');
-            setFile(null);
-            return;
+    const handleFileChange = async (e) => {
+        if (!e.target.files || e.target.files.length === 0) {
+          console.error("No file selected.");
+          return;
         }
-
+      
+        const selectedFile = e.target.files[0];
+      
+        if (!selectedFile) {
+          console.error("File is undefined.");
+          return;
+        }
+      
         setFile(selectedFile);
         setError(null);
-        setIsUploading(true);  // Set uploading state to true
-
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('upload_preset', 'i1m10bd7'); // Your Cloudinary upload preset
-
-        const url = `https://api.cloudinary.com/v1_1/black-box/${type}/upload`;
-
-        axios.post(url, formData, {
-            onUploadProgress: progressEvent => {
-                const percentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                setProgress(percentage);
-            }
-        })
-            .then(res => {
-                console.log(res.data);
-                onUpload(res.data.secure_url, selectedFile.name, selectedFile.size);
-                setIsUploading(false);  // Set uploading state to false after upload
-            })
-            .catch(err => {
-                console.error(err);
-                setError('Upload failed. Please try again.');
-                setIsUploading(false);  // Set uploading state to false if error occurs
-            });
-    };
+        setIsUploading(true);
+      
+        const fileName = `${type}s/${Date.now()}_${selectedFile.name}`;
+      
+        const params = {
+          Bucket: bucketName,
+          Key: fileName,
+          Body: selectedFile,
+          ContentType: selectedFile.type,
+        };
+      
+        try {
+          // Upload file to S3
+          const uploadResponse = await s3.upload(params).promise();
+      
+          // Generate CloudFront URL
+          const uploadedFileUrl = `${cloudFrontUrl}${fileName}`;
+      
+          onUpload(uploadedFileUrl, selectedFile.name, selectedFile.size);
+          setIsUploading(false);
+          setProgress(100);
+          console.log("Upload successful:", uploadedFileUrl);
+        } catch (error) {
+          console.error("Upload failed:", error);
+          setError("Upload failed. Please try again.");
+          setIsUploading(false);
+        }
+      };
 
     return (
         <div className={`box imageBox fsbfont ${isUploading ? 'disabled' : ''}`}>

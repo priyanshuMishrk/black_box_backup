@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import AuthContext, {BaseUrl} from "../../Context/AuthContext";
 import axios from 'axios';
+import AWS from "aws-sdk";
 import { useNavigate } from 'react-router-dom';
 const { GoogleGenerativeAI }  = require('@google/generative-ai')
 const keywordExtractor = require('keyword-extractor');
+
+AWS.config.update({
+  accessKeyId: "AKIAXYKJWCCAIBD425IC",
+  secretAccessKey: "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",
+  region: "ap-south-1",
+});
+
+const s3 = new AWS.S3();
+const bucketName = "blackboxim";
+const cloudFrontUrl = "https://d2f7i2k65rgoj5.cloudfront.net/";
 
 const googleAI = new GoogleGenerativeAI('AIzaSyCa5bLyDC7fUpqgi0aJlJzDkgf-JfWaC5Y');
 const geminiConfig = {
@@ -62,12 +73,31 @@ const StreamingForm = () => {
 
   const handleThumbnailChange = async (event) => {
     const selectedFile = event.target.files[0];
-    const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('upload_preset', 'i1m10bd7');
-        const url = `https://api.cloudinary.com/v1_1/black-box/image/upload`
-        const result = await axios.post(url, formData)
-        setThumbnail(result.data.secure_url)
+    if (!selectedFile) return;
+  
+    const fileName = `thumbnails/${Date.now()}_${selectedFile.name}`;
+  
+    const params = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: selectedFile,
+      ContentType: selectedFile.type,
+      ACL: "public-read", // Ensure the file is publicly accessible
+    };
+  
+    try {
+      // Upload to S3
+      const uploadResponse = await s3.upload(params).promise();
+      
+      // Generate CloudFront URL
+      const uploadedFileUrl = `${cloudFrontUrl}${fileName}`;
+  
+      // Set the uploaded image URL in state
+      setThumbnail(uploadedFileUrl);
+      console.log("File uploaded successfully:", uploadedFileUrl);
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
   };
 
   const handleTitleChange = (event) => {

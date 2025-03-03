@@ -11,6 +11,7 @@ import { GiWireframeGlobe } from "react-icons/gi";
 import notify from "../../Images/notificationBell.svg"
 import Avatarr from "./Avatarr";
 import AuthContext, { BaseUrl } from "../../Context/AuthContext";
+import { SocketContext } from "../../Context/SocketContext";
 import { useContext } from "react";
 import axios from "axios";
 
@@ -24,6 +25,26 @@ const Header = () => {
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null,
   );
+
+  const id = localStorage.getItem("User");
+
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    socket.on(`notification:${id}`, (data) => {
+      console.log("New Notification:", data);
+      playNotificationSound();
+    });
+
+    return () => {
+      socket.off("newNotification");
+    };
+  }, []);
+
+  const playNotificationSound = () => {
+    const audio = new Audio("https://bask-s.s3.ap-south-1.amazonaws.com/notification-2-269292.mp3");
+    audio.play().catch((err) => console.error("Audio play failed:", err));
+  };
 
   useEffect(() => {
     async function subsOfCart() {
@@ -68,6 +89,31 @@ useEffect(() => {
           s = course
         }
         setCartLength(s.length)
+      }
+      if (user) {
+        subsOfCart()
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [])
+
+  useEffect(() => {
+    if (localStorage.getItem("soundPermissionAsked")) return;
+
+    // Attempt to play a silent audio to trigger autoplay permission
+    const audio = new Audio();
+    audio.play().catch(() => {
+      console.log("Sound permission is not granted yet.");
+    });
+
+    localStorage.setItem("soundPermissionAsked", "true");
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      async function subsOfCart() {
+        socket.emit('useAlive', id)
       }
       if (user) {
         subsOfCart()

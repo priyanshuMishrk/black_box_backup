@@ -529,12 +529,6 @@ model Follower {
   followingId Int
 }
 
-model Notification {
-  id          Int      @id @default(autoincrement())
-  userId      Int      // The user to whom the notification is sent
-  message     String   // The notification message (e.g., "Someone followed you", "You have a new message")
-  createdAt   DateTime @default(now()) // Timestamp of when the notification was created
-}
 
 
 model Message {
@@ -551,5 +545,31 @@ model Connections {
   ownerId     Int
   followers   Int[]
   following   Int[]
+}
+
+model KeepAlive {
+  id        Int  @id @default(autoincrement()) 
+  userId    Int  @unique
+  isAlive   Boolean @default(false)
+  updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id          Int   @id @default(autoincrement()) // Unique identifier
+  userId      String              // User receiving the notification
+  title       String                         // Notification title
+  description String                         // Notification description
+  img         String?                        // Optional image URL
+
+  status      NotificationStatus @default(WAITING) // Notification status
+  sentAt      DateTime?                         // When the notification was sent
+  createdAt   DateTime   @default(now())        // When the notification was created
+  updatedAt   DateTime   @updatedAt             // Auto-updates on any change
+}
+
+enum NotificationStatus {
+  WAITING  // Notification is created but not sent yet
+  SENT     // Notification has been sent
+  READ     // User has seen the notification
 }
 
