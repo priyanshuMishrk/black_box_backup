@@ -81,8 +81,7 @@ const StreamingForm = () => {
       Bucket: bucketName,
       Key: fileName,
       Body: selectedFile,
-      ContentType: selectedFile.type,
-      ACL: "public-read", // Ensure the file is publicly accessible
+      ContentType: selectedFile.type
     };
   
     try {
