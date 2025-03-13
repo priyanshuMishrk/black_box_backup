@@ -256,7 +256,7 @@ useEffect(() => {
         >
           <div className="d-flex">
             <Link to="/main">
-              <img src={Logo} width={200} className="p-0 m-0 cp" alt="" />
+              <img src="https://bask-s.s3.ap-south-1.amazonaws.com/blackbox-logo-01.png" width={200} className="p-0 m-0 cp" alt="" />
             </Link>
           </div>
           <div className="">
@@ -462,7 +462,7 @@ useEffect(() => {
         <Container fluid className="d-flex justify-content-between w-100 p-3 ">
           <div>
             <Link to="/main">
-              <img src={Logo} width={150} className="p-0 m-0 cp" alt="" />
+              <img src='https://bask-s.s3.ap-south-1.amazonaws.com/blackbox-logo-01.png' width={150} className="p-0 m-0 cp" alt="" />
             </Link>
           </div>
           <div className="">
