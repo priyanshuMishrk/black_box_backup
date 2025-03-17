@@ -729,7 +729,7 @@ const StreamEnterHome = () => {
 
       </div>}
 
-      <div className="bannersForHomePage oasjosjdosjdosdjosj">
+      <div className={`bannersForHomePage oasjosjdosjdosdjosj ${streams.length === 0 && 'mt-5'}`}>
         <div className="titleOfHLIPeverySection oopsOneIssue">
           <div className="box1 box21">
 
