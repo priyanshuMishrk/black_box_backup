@@ -686,7 +686,7 @@ const StreamEnterHome = () => {
         </div>
       </div>
 
-      <div className="forYouStreaming mb-5">
+      {streams.length > 0 && <div className="forYouStreaming mb-5">
 
         <span className="headd6kahsd fsbfont">
           {name && 'For you'}
@@ -727,7 +727,7 @@ const StreamEnterHome = () => {
           })}
         </div>
 
-      </div>
+      </div>}
 
       <div className="bannersForHomePage oasjosjdosjdosdjosj">
         <div className="titleOfHLIPeverySection oopsOneIssue">
